@@ -49,3 +49,13 @@ def access_management():
 def m_departemen():
   """ Routing Master Departemen """
   return render_template('master/m-departemen.html', page="m-departemen")
+
+
+'''MASTER EMPLOYEES'''
+@fe_master_init.route('/m-employees')
+@login_required
+@controller_akses.cek_page('MASTER EMPLOYEES')
+@controller_akses.page_counter('m-employees')
+def m_employees():
+  """ Routing Master Employees """
+  return render_template('master/user/m-employees.html', page="m-employees")

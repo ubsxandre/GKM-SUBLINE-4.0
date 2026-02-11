@@ -97,6 +97,14 @@ def api_m_bagian():
   elif request.method == "GET":
     return controller_master.getMasterBagian()
 
+''' MASTER EMPLOYEES '''
+@be_master_init.route('/api/m-employees', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@controller_akses.autentikasi
+def api_m_employees():
+  mode =request.form.get('mode')
+  if request.method == "POST" and mode == "datatable":
+    return controller_master.getEmployeesDatatable()
+  
 # ''' MASTER DEPARTEMEN '''
 # @be_master_init.route('/api/m-departemen', methods=['GET', 'POST', 'PUT', 'DELETE'])
 # @controller_akses.autentikasi

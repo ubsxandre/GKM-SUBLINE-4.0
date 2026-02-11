@@ -29,6 +29,7 @@ MAM = model_master.MasterAksesManagement
 MAMHIST = model_master.MasterAksesManagementHistory
 MBAGIAN = model_master.MasterBagian
 MBAGIANHIST = model_master.MasterBagianHistory
+MPLOY = model_master.MasterEmployees
 
 
 def daterange(start_date, end_date):
@@ -1006,54 +1007,33 @@ def deleteMasterBagian():
     return jsonify({'status':'error', 'message':str(e)})
   
 
-  try:
-    data = request.get_json()
-    created_by = current_user.nik if current_user.is_authenticated else 'SYSTEM'
-    data_delete = {'created_by' : created_by, 'created_date' : datetime.now(), 'status_aktif':0}
-    for row in data:
-      data_delete[row] = data.get(row)
-    id_ = data_delete['id']
-    qdel = db.session.query(MMESIN).filter(MMESIN.id==id_, MMESIN.status_aktif == 1).first()
-    if not qdel:
-      return jsonify({'status':'error', 'message':'ID Mesin not found'})
-    data_old = qdel.__dict__
 
-    del data_old['_sa_instance_state']
-    del data_old['id']
-    data_old['id_history'] = id_
+''' Master Employees '''
+def getEmployeesDatatable():
+  datatable = controller_module.Datatable(request.form)
+  search_value = datatable.get_search_value()
+  order = []
+ 
+  sort_col_name = ['id', 'nik', 'nama', ]
+  sort_obj = {
+    'id': MPLOY.id,
+    'nik': MPLOY.nik,
+    'nama': MPLOY.nama,
+  }
+  order = datatable.get_order(sort_col_name=sort_col_name, sort_obj=sort_obj)
+  order.append(MPLOY.id)
 
-    data_last = data_old.copy()
-    data_last.update({
-      'created_date': datetime.now(),
-      'status_aktif': 0,
-      'created_by': created_by
-    })
-    db.session.add(MMESINHIST(**data_old))
-    db.session.commit()
+  jumlah_data_full = db.session.query(MPLOY).filter(MPLOY.status_aktif=='1').count()
 
-    db.session.add(MMESINHIST(**data_last))
-    db.session.commit()
+  query_filtered = db.session.query(MPLOY).with_entities(MPLOY.id,
+                                                          MPLOY.nik,
+                                                          MPLOY.nama)\
+                                          .filter(MPLOY.status_aktif=='1',
+                                                  or_(MPLOY.id.like(search_value),
+                                                      MPLOY.nik.like(search_value),
+                                                      MPLOY.nama.like(search_value)))\
+                                          .order_by(*order)
 
-    db.session.query(MMESIN).filter(MMESIN.id == id_, MMESIN.status_aktif == 1).delete(synchronize_session=False)
-    db.session.commit()
-    
-    db.session.close()
-    return jsonify({'status':'success', 'message':'Mesin deleted successfully', 'data':data_old})
-  except Exception as e:
-    print(e)
-    return jsonify({'status':'error', 'message':str(e)})
-
-
-  try:
-    id = request.form.get('id')
-    filter = []
-    filter.append(MSIKTEMPE.id==id) if id else []
-    qsiktem = db.session.query(MSIKTEMPE).with_entities(MSIKTEMPE.id.label("id_tempe"), MSIKTEMPE.id_siklus, MSIKTEMPE.time, MSIKTEMPE.temperatur, MSIKTEMPE.keterangan, MSIKTEMPE.created_by, MSIKTEMPE.created_date, MSIKTEMPE.status_aktif).filter(MSIKTEMPE.status_aktif == 1, *filter,).all()
-    data = pd.DataFrame(qsiktem)
-    nuii = pd.DataFrame()
-    if data.empty:
-      return nuii
-    return data
-  except Exception as e:
-    data = pd.DataFrame()
-    return data
+  data_json = datatable.get_data_json_with_entities(query_filtered) 
+  response = datatable.get_response(jumlah_data_full=jumlah_data_full, data_json=data_json)
+  return jsonify(response)

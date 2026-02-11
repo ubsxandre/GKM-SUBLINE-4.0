@@ -39,3 +39,6 @@ def register_backend(app):
   from app_center.backend.ensiklopedia import be_ensiklopedia_init as ensiklopedia
   app.register_blueprint(ensiklopedia)
   
+  ''' TRANSACTION ABSENSI '''
+  from app_center.backend.transaction.absensi import be_absensi_init as absensi
+  app.register_blueprint(absensi)

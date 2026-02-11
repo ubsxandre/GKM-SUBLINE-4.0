@@ -137,14 +137,16 @@ class MasterAksesManagementHistory(db.Model):
   def to_dict(self):
     return {row:getattr(self,row) for row in dir(self) if not row.startswith('_') and row not in ['registry', 'query_class', 'query', 'metadata'] and not callable(getattr(self,row))}
 
-class MasterEmployee(db.Model):
+class MasterEmployees(db.Model):
   """
-  Master Employee
+  Master Employees
   """
-  __tablename__ = 'm_employee'
+  __tablename__ = 'm_employees'
   id = db.Column(db.Integer, primary_key=True)
+  id_code = db.Column(db.String(100))
   nik = db.Column(db.String(10))
   nama = db.Column(db.String(100))
+  bagian = db.Column(db.String(100))
   department = db.Column(db.String(100))
   jabatan = db.Column(db.String(100))
   golongan = db.Column(db.String(2))
@@ -154,16 +156,18 @@ class MasterEmployee(db.Model):
   def to_dict(self):
     return {row:getattr(self,row) for row in dir(self) if not row.startswith('_') and row not in ['registry', 'query_class', 'query', 'metadata'] and not callable(getattr(self,row))}
 
-class MasterEmployeeHistory(db.Model):
+class MasterEmployeesHistory(db.Model):
   """
-  Master Employee History
+  Master Employees History
   """
-  __tablename__ = 'm_employee_history'
+  __tablename__ = 'm_employees_history'
   __bind_key__ = "history"
   id = db.Column(db.Integer, primary_key=True)
   id_history = db.Column(db.Integer)
+  id_code = db.Column(db.String(100))
   nik = db.Column(db.String(10))
   nama = db.Column(db.String(100))
+  bagian = db.Column(db.String(100))
   department = db.Column(db.String(100))
   jabatan = db.Column(db.String(100))
   golongan = db.Column(db.String(2))

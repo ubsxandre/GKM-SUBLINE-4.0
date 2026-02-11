@@ -7,7 +7,7 @@
       <span class="app-brand-logo demo">
         <img src="/static/assets/img/logo/ubs-logo-gold.png" class="mx-2" alt="" width="30">
       </span>
-      <span class="app-brand-text demo menu-text fw-bold ms-2" id="logo-dept" >Cor
+      <span class="app-brand-text demo menu-text fw-bold ms-2" id="logo-dept" >SUBLINE
         
       </span>
       <span class="app-brand-text demo menu-text ms-2" >4.0</span>
@@ -31,18 +31,18 @@
   <!-- Sidebar Menu -->
   <ul class="menu-inner py-1">
     <!-- Dashboards -->
-    <li class="menu-item {{ 'active open' if page == 'dashboard-oven-moule'  else '' }}">
+    <li class="menu-item {{ 'active open' if page == 'dashboard-deteksi-cctv' else '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ri-dashboard-line"></i>
         <div data-i18n="Dashboards">Dashboards</div>
       </a>
-      <!-- <ul class="menu-sub">
-        <li class="menu-item {{ 'active' if page == 'dashboard-oven-moule' else '' }}">
-          <a href="dashboard-oven-moule" class="menu-link ">
-            <div data-i18n="Oven Moule">Oven Moule</div>
+      <ul class="menu-sub">
+        <li class="menu-item {{ 'active' if page == 'dashboard-deteksi-cctv' else '' }}">
+          <a href="dashboard-deteksi-cctv" class="menu-link ">
+            <div data-i18n="Deteksi CCTV">Deteksi CCTV</div>
           </a>
         </li>
-      </ul> -->
+      </ul>
     </li>
 
     <li class="menu-item {{ 'active' if page == 'access-management' else '' }}">
@@ -66,21 +66,36 @@
       <span class="menu-header-text" data-i18n="In Transcation">In Transcation</span>
     </li>
 
-    <!-- <li class="menu-item {{ 'active' if page == 't-oven-siklus' else '' }}">
-      <a href="t-oven-siklus" class="menu-link">
+    <li class="menu-item {{ 'active' if page == 't-absensi' else '' }}">
+      <a href="t-absensi" class="menu-link">
         <i class="menu-icon tf-icons ri-survey-line"></i>
-        <div data-i18n="Oven Siklus">Oven Siklus</div>
+        <div data-i18n="Absensi">Absensi</div>
       </a>
-    </li> -->
-    <!-- <li class="menu-item {{ 'active' if page == '' else '' }}">
-      <a href="" class="menu-link">
+    </li>
+    <li class="menu-item {{ 'active' if page == 't-lembur' else '' }}">
+      <a href="t-lembur" class="menu-link">
         <i class="menu-icon tf-icons ri-file-check-line"></i>
-        <div data-i18n="Apporval">Apporval</div>
+        <div data-i18n="Lembur">Lembur</div>
       </a>
-    </li> -->
-
-
-    
+    </li>
+    <li class="menu-item {{ 'active' if page == 't-cuti' else '' }}">
+      <a href="t-cuti" class="menu-link">
+        <i class="menu-icon tf-icons ri-file-check-line"></i>
+        <div data-i18n="Cuti">Cuti</div>
+      </a>
+    </li>
+    <li class="menu-item {{ 'active' if page == 't-dinas-luar' else '' }}">
+      <a href="t-dinas-luar" class="menu-link">
+        <i class="menu-icon tf-icons ri-file-check-line"></i>
+        <div data-i18n="Dinas Luar">Dinas Luar</div>
+      </a>
+    </li>
+    <li class="menu-item {{ 'active' if page == 't-keluar-ruangan' else '' }}">
+      <a href="t-keluar-ruangan" class="menu-link">
+        <i class="menu-icon tf-icons ri-file-check-line"></i>
+        <div data-i18n="Keluar Ruangan">Keluar Ruangan</div>
+      </a>
+    </li>
 
     
     
@@ -88,6 +103,36 @@
     <!-- REPORT -->
     <li class="menu-header mt-5">
       <span class="menu-header-text" data-i18n="report">Report</span>
+    </li>
+    <li class="menu-item {{ 'active' if page == 'r-absensi' else '' }}">
+      <a href="r-absensi" class="menu-link">
+        <i class="menu-icon tf-icons ri-survey-line"></i>
+        <div data-i18n="Report Absensi">Report Absensi</div>
+      </a>
+    </li>
+    <li class="menu-item {{ 'active' if page == 'r-lembur' else '' }}">
+      <a href="r-lembur" class="menu-link">
+        <i class="menu-icon tf-icons ri-survey-line"></i>
+        <div data-i18n="Report Lembur">Report Lembur</div>
+      </a>
+    </li>
+    <li class="menu-item {{ 'active' if page == 'r-cuti' else '' }}">
+      <a href="r-cuti" class="menu-link">
+        <i class="menu-icon tf-icons ri-survey-line"></i>
+        <div data-i18n="Report Cuti">Report Cuti</div>
+      </a>
+    </li>
+    <li class="menu-item {{ 'active' if page == 'r-dinas-luar' else '' }}">
+      <a href="r-dinas-luar" class="menu-link">
+        <i class="menu-icon tf-icons ri-survey-line"></i>
+        <div data-i18n="Report Dinas Luar">Report Dinas Luar</div>
+      </a>
+    </li>
+    <li class="menu-item {{ 'active' if page == 'r-keluar-ruangan' else '' }}">
+      <a href="r-keluar-ruangan" class="menu-link">
+        <i class="menu-icon tf-icons ri-survey-line"></i>
+        <div data-i18n="Report Keluar Ruangan">Report Keluar Ruangan</div>
+      </a>
     </li>
 
 
@@ -123,12 +168,12 @@
       </ul>
     </li>
 
-    <li class="menu-item {{ 'active open' if page == 'm-mesin' or page == 'm-siklus' else '' }}">
+    <!-- <li class="menu-item {{ 'active open' if page == 'm-mesin' or page == 'm-siklus' else '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ri-settings-3-line"></i>
         <div data-i18n="Mesin">Mesin</div>
       </a>
-      <ul class="menu-sub">
+      <ul class="menu-sub"> -->
         <!-- <li class="menu-item {{ 'active' if page == 'm-mesin' else '' }}">
           <a href="m-mesin" class="menu-link">
             <div data-i18n="Mesin">Mesin</div>
@@ -140,21 +185,20 @@
           </a>
         </li> -->
         
-      </ul>
-    </li>
+      <!-- </ul>
+    </li> -->
 
-    <li class="menu-item {{ 'active open' if page == 'm-bagian'  else '' }}">
+    <li class="menu-item {{ 'active open' if page == 'm-employees' or page == 'm-' else '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ri-team-line"></i>
-        <div data-i18n="Employee">Employee</div>
+        <div data-i18n="Employees">Employees</div>
       </a>
       <ul class="menu-sub">
-        <!-- <li class="menu-item {{ 'active' if page == 'm-bagian' else '' }}">
-          <a href="m-bagian" class="menu-link">
-            <div data-i18n="Bagian">Bagian</div>
+        <li class="menu-item {{ 'active' if page == 'm-employees' else '' }}">
+          <a href="m-employees" class="menu-link">
+            <div data-i18n="Employees">Employees</div>
           </a>
-        </li> -->
-        
+        </li>
       </ul>
     </li>
 
