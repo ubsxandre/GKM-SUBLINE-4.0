@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "56a99f18-3c8c-4dfc-99b6-7aad7a7c9f8d",
+		"name": "UBS API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get_token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"authKey\":\"m7hgShvLwdgwdyR4JndTtQFUeYfnYYsMmM9uQUHHtc9QvAFvcG58HqQPX96x5RcmQYkTEJbgNUc49FQmDauMg\"}"
+				},
+				"url": {
+					"raw": "http://172.20.33.42/ubs-api/Get_token",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"33",
+						"42"
+					],
+					"path": [
+						"ubs-api",
+						"Get_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJlbmMiOnsiSURfVVNFUiI6IlBSSjA0IiwiTkFNQSI6Ik91dHNvdXJjZSBQcm9qZWN0IDQuMCJ9LCJleHAiOjE2NDYyMDk2ODN9.NnM0VTHq392aOuv1iTgnhfx7sLXKT5Fhgpwci4mxT62JYZSgFBTJeIb_tdYRDZgpcVPIRrrMRu1r1-NmWXV22w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://172.20.33.42/ubs-api/bahan/Get_prs?no_odiv=HP14025963&sub_odiv=1",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"33",
+						"42"
+					],
+					"path": [
+						"ubs-api",
+						"bahan",
+						"Get_prs"
+					],
+					"query": [
+						{
+							"key": "no_odiv",
+							"value": "HP14025963"
+						},
+						{
+							"key": "sub_odiv",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
