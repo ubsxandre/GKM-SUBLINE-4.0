@@ -1,0 +1,375 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Siklus {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Siklus</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap"> 
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Siklus
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>Siklus</th>
+                <th>Time</th>
+                <th>Temperatur</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Siklus</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_no_mesin" class="form-control" placeholder="Enter Nomer Siklus" required>
+                <label for="add_no_mesin">Nomer Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_cycle_time" class="form-control" placeholder="Enter Cycle Time">
+                <label for="add_cycle_time">Cycle Time</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="serial_number" aria-label="Default select example">
+                </select>
+                <label for="serial_number">Serial Number</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="div_head_mesin">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="head_mesin" aria-label="Default select example" required>
+                  <option value="SINGLE">SINGLE</option>
+                  <option value="DOUBLE">DOUBLE</option>
+                </select>
+                <label for="head_mesin">Head Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="max_voucher" aria-label="Default select example" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
+                <label for="max_voucher">Max Voucher</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row add-form-tray" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="tray" aria-label="Default select example">
+                </select>
+                <label for="tray">Tray</label>
+              </div>
+            </div>
+          </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Mesin</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="detail-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_siklus" class="form-control" placeholder="Enter Mesin" required readonly>
+                <label for="detail_siklus">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_time" class="form-control" placeholder="Enter Cycle Time" required readonly>
+                <label for="detail_time">Cycle Time</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_temperatur" class="form-control" placeholder="Enter Serial Number Gateway" required readonly>
+                <label for="detail_temperatur">Serial Number Gateway</label>
+              </div>
+            </div>
+          </div>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Proses</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit_id" name="id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_no_mesin" name="no_mesin" class="form-control" placeholder="Enter Nomer Mesin" required>
+                <label for="edit_no_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_cycle_time" name="cycle_time" class="form-control" placeholder="Enter Cycle Time" required>
+                <label for="edit_cycle_time">Cycle Time</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_serial_number" name="id_modul" aria-label="Default select example">
+                </select>
+                <label for="edit_serial_number">Serial Number</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_lokasi" name="id_lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="edit_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row edit-form-tray" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_tray" name="id_tray" aria-label="Default select example">
+                </select>
+                <label for="edit_tray">Tray</label>
+              </div>
+            </div>
+          </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+			<div class="modal-header flex-column">
+				<div class="icon-box">
+					<i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+				</div>						
+				<h4 class="modal-title w-100">Are you sure?</h4>	
+			</div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+		</div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(async function () {
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: false,
+      order: [[0, 'asc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/m-siklus",
+        data: function(sc){
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        // {data: 'id'},
+        {data: 'siklus'},
+        {data: 'time'},
+        {data: 'temperatur'},
+        {
+          orderable: false,
+          className: 'control',
+          data:null,
+          render:function(data){
+            return `
+              <div class="d-flex align-items-center">
+                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
+      ],
+      drawCallback: function () {
+        let api = this.api();
+        let rows = api.rows({ page: 'current' }).nodes();
+        let last = null;
+        let rowspan = 1;
+
+        api.column(0, { page: 'current' }).data().each(function (group, i) {
+          if (last === group) {
+            rowspan++;
+            $('td:eq(0)', rows[i]).remove();
+            $('td:eq(0)', rows[i - rowspan + 1]).attr('rowspan', rowspan);
+          } else {
+            last = group;
+            rowspan = 1;
+          }
+        });
+      }
+
+    }); table.on('draw', function() {initializeTooltips();});
+
+    $(document).on("click", ".detail-record", function(event){
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      // console.log("ISI DETAIL : ", rdata)
+      $('#detail_id').val(rdata.id)
+      $('#detail_siklus').val(rdata.siklus)
+      $('#detail_time').val(rdata.time)
+      $('#detail_temperatur').val(rdata.temperatur)
+
+      $('#modal-detail').modal('show')
+    })
+
+    $(document).on("click", ".add-record", function(event) {
+      event.preventDefault();
+      $('#modal-add').modal('show');
+    });
+
+    $(document).on("submit", "#add-form", function(event){
+      event.preventDefault();      
+      const formData = {
+        siklus: $('#add_siklus').val(),
+        time: $('#add_time').val(),
+        temperatur: $('#add_temperatur').val(),
+      };
+
+      $.ajax({
+        url: '/api/m-siklus', 
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#add-form')[0].reset();
+          $('#modal-add').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

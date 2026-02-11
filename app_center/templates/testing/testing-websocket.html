@@ -1,0 +1,25 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Transaction Oven {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+</div>
+
+<script type="text/javascript">
+  const socket = io();
+  socket.on('update_status_oven', function(data) {
+      // data: { no_voucher: "...", naik_mesin: "nilai_baru" }
+      console.log('PEPEK', data)
+    });
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,38 @@
+{
+  "post": {
+    "description": "Login User using SSO account",
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "parameters": [
+      {
+        "name": "JSON nik-pass",
+        "in": "body",
+        "description": "JSON data for login",
+        "required": true,
+        "schema": {
+                    "type": "object",
+                    "properties": {
+                      "nik": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      }
+                    }
+                  }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

@@ -1,0 +1,555 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Siklus {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Siklus</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap"> 
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Siklus
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama Siklus</th>
+                <!-- <th>Total Siklus</th> -->
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;">
+  <div class="modal-dialog modal-l" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Siklus</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_siklus" class="form-control" placeholder="Enter Siklus" required>
+                <label for="add_siklus">Nama Siklus</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_keterangan" class="form-control" placeholder="Enter Keterangan">
+                <label for="add_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+          <!-- Tombol Tambah Time dan Temperatur -->
+          <div class="col-12 mb-3 mt-2">
+            <button type="button" class="btn btn-sm btn-primary" id="btn-add-temperatur"> + Tambah
+            </button>
+          </div>
+
+          <!-- List Time Temperatur -->
+          <div id="add-temperatur-wrapper"></div>
+        </div>
+        <script>
+          $(document).ready(function () {
+            let index = 0;
+
+            $("#btn-add-temperatur").click(function () {
+              index++;
+              
+              const row = `
+                <div class="row g-2 align-items-center mb-3 temperatur-item" data-index="${index}">
+                  <div class="col-5">
+                    <div class="form-floating form-floating-outline">
+                      <input type="number" step="any" name="add_time[]" class="form-control" placeholder="Time (Jam)" required>
+                      <label>Time (Jam) </label>
+                    </div>
+                  </div>
+                  <div class="col-5">
+                    <div class="form-floating form-floating-outline">
+                      <input type="number" step="any" name="add_temperatur[]" class="form-control" placeholder="Temperatur (°C)" required>
+                      <label>Tempeartur (°C)</label>
+                    </div>
+                  </div>
+                  <div class="col-2 d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger btn-sm btn-remove-temperatur">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              `;
+
+              $("#add-temperatur-wrapper").append(row);
+            });
+
+            // Remove sub row
+            $(document).on("click", ".btn-remove-temperatur", function () {
+              $(this).closest(".temperatur-item").remove();
+            });
+          });
+        </script>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" aria-labelledby="modal-detail-label" aria-hidden="true">
+  <div class="modal-dialog modal-l">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" aria-labelledby="modal-edit-label" aria-hidden="true">
+  <div class="modal-dialog modal-l">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-edit-title">Edit Siklus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="edit-form">
+        <div class="modal-body" id="modal-edit-body">
+          <input type="hidden" id="edit_id">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_siklus" class="form-control" placeholder="Enter Siklus" required>
+                <label for="edit_siklus">Nama Siklus</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_keterangan" class="form-control" placeholder="Enter Keterangan">
+                <label for="edit_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-3 mt-2">
+            <button type="button" class="btn btn-sm btn-primary" id="btn-add-temperatur-edit"> + Tambah
+            </button>
+          </div>
+          <div id="add-temperatur-wrapper-edit"></div>
+        </div>
+        <script>
+          // tambahkan script js untuk menampilkan data siklus. Bisa untuk edit time dan temperatur
+          $(document).ready(function () {
+            let index = 0;
+
+            function renderTemperaturRow(id_tempe = '', time = '', temperatur = '') {
+              index++;
+              return `
+                <div class="row g-2 align-items-center mb-3 temperatur-item" data-index="${index}">
+                  <input type="number" step="any" name="edit_id_tempe[]" class="form-control" value="${id_tempe}" hidden>
+                  <div class="col-5">
+                    <div class="form-floating form-floating-outline">
+                      <input type="number" step="any" name="edit_time[]" class="form-control" value="${time}" placeholder="Time (Jam)" required>
+                      <label>Time (Jam)</label>
+                    </div>
+                  </div>
+
+                  <div class="col-5">
+                    <div class="form-floating form-floating-outline">
+                      <input type="number" step="any" name="edit_temperatur[]" class="form-control" value="${temperatur}" placeholder="Temperatur (°C)" required>
+                      <label>Temperatur (°C)</label>
+                    </div>
+                  </div>
+
+                  <div class="col-2 d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger btn-sm btn-remove-temperatur">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              `;
+            }
+
+            // tombol tambah
+            $("#btn-add-temperatur-edit").click(function () {
+              $("#add-temperatur-wrapper-edit").append(renderTemperaturRow());
+            });
+
+            // // hapus row
+            // $(document).on("click", ".btn-remove-temperatur", function () {
+            //   $(this).closest(".temperatur-item").remove();
+            // });
+
+            // // reset saat modal ditutup
+            // $('#modal-edit').on('hidden.bs.modal', function () {
+            //   $("#add-temperatur-wrapper").empty();
+            //   index = 0;
+            //   $('#form-edit')[0].reset();
+            // });
+
+            // expose function ke global agar bisa dipanggil saat klik edit
+            window.loadEditTemperatur = function (detail = []) {
+              $("#add-temperatur-wrapper-edit").empty();
+              index = 0;
+
+              if (detail.length === 0) {
+                $("#add-temperatur-wrapper-edit").append(renderTemperaturRow());
+              } else {
+                detail.forEach(item => {
+                  $("#add-temperatur-wrapper-edit").append(
+                    renderTemperaturRow(item.id_tempe, item.time, item.temperatur)
+                  );
+                });
+              }
+            };
+          });
+        </script>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+			<div class="modal-header flex-column">
+				<div class="icon-box">
+					<i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+				</div>						
+				<h4 class="modal-title w-100">Are you sure?</h4>	
+			</div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+		</div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: true,
+      order: [[0, 'asc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/m-siklus",
+        data: function(sc){
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        {data: 'id'},
+        {data: 'siklus'},
+        {
+          orderable: false,
+          className: 'control',
+          data:null,
+          render:function(data){
+            return `
+              <div class="d-flex align-items-center">
+                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
+      ],
+    }); table.on('draw', function() {initializeTooltips();});
+
+    $(document).on("click", ".detail-record", function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      let $tr = $(this).closest('tr');
+      let data = table.row($tr).data();
+
+      if (!data) {
+        data = {};
+        $(this).find('td').each(function (i) {
+          data[i] = $(this).text().trim();
+        });
+      }
+      
+      // ambil langsung data detail dari kolom 'det'
+      const tableData = data['det'] || [];
+
+      // isi modal utama
+      $('#modal-title').text('Temperatur Siklus');
+      $('#modal-body').html(`
+        <div class="d-flex justify-content-between flex-wrap gap-6">
+          <div>
+            <p class="card-title mb-0">Siklus : <span class="fw-bold">${data['siklus'] || ''}</span></p>
+          </div>
+        </div>
+        <div class="table-responsive mt-3">
+          <table id="detail-table" class="table table-sm table-hover table-bordered w-100">
+            <thead class="table-light">
+              <tr id="detail-table-header"></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      `);
+
+      // definisi kolom (sesuai struktur detail)
+      const columnDefs = [
+        { data: 'time', title: 'Time' },
+        { data: 'temperatur', title: 'Temperatur' },
+      ];
+
+      // buat header tabel
+      $('#detail-table-header').empty();
+      columnDefs.forEach(col => {
+        $('#detail-table-header').append(`<th>${col.title}</th>`);
+      });
+
+      // destroy DataTable lama jika ada
+      if ($.fn.DataTable.isDataTable('#detail-table')) {
+        $('#detail-table').DataTable().destroy();
+        $('#detail-table tbody').empty();
+      }
+
+      // buat DataTable baru
+      const detail_table = $('#detail-table').DataTable({
+        paging: false,
+        searching: false,
+        info: true,
+        ordering: true,
+        language: {
+          emptyTable: "Tidak ada data tersedia",
+          processing: "Memuat...",
+        },
+        columns: columnDefs,
+      });
+
+      // isi data
+      detail_table.clear().rows.add(tableData).draw();
+      $('#modal-detail').modal('show');
+    });
+
+    $(document).on("click", ".add-record", function(event) {
+      event.preventDefault()
+    });
+
+    $(document).on("submit", "#add-form", function(event){
+      event.preventDefault();
+
+      const time = $("input[name='add_time[]']")
+          .map(function () { return parseFloat($(this).val()) || 0; })
+          .get();
+      const temperatur = $("input[name='add_temperatur[]']")
+          .map(function () { return parseFloat($(this).val()) || 0; })
+          .get();
+
+      if (time.length === 0) {
+        alert("Tambahkan minimal 1 Time dan Temperatur!");
+        return;
+      }
+
+      const dataTemperatur = time.map((taim, i) => ({
+        time: taim,
+        temperatur: temperatur[i] || ""
+      }));
+
+      const formData = {
+        siklus: $('#add_siklus').val(),
+        keterangan: $('#add_keterangan').val(),
+        data_temperatur: dataTemperatur,
+      };     
+      $.ajax({
+        url: '/api/m-siklus', 
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#add-form')[0].reset();
+          // $('#add-temperatur-wrapper').html('');
+          $('#modal-add').modal('hide');
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      }); 
+
+    });
+
+    $(document).on("click", ".edit-record", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      let $tr = $(this).closest('tr');
+      let data = table.row($tr).data();
+
+      if (!data) {
+        let idx = table.row($tr).index();
+        data = table.row(idx - 1).data();
+      }
+
+      if (!data) {
+        alert('Data tidak ditemukan');
+        return;
+      }
+
+      $('#edit_id').val(data.id || '');
+      $('#edit_siklus').val(data.siklus || '');
+      $('#edit_keterangan').val(data.keterangan || '');
+      
+      loadEditTemperatur(data.det || []);
+
+      $('#modal-edit').modal('show');
+    });
+
+    $(document).on("submit", "#edit-form", function (event) {
+      event.preventDefault();
+
+      const edit_id_tempe = $("input[name='edit_id_tempe[]']")
+          .map(function () { return parseFloat($(this).val()) || 0; })
+          .get();
+
+      const edit_time = $("input[name='edit_time[]']")
+          .map(function () { return parseFloat($(this).val()) || 0; })
+          .get();
+
+      const edit_temperatur = $("input[name='edit_temperatur[]']")
+          .map(function () { return parseFloat($(this).val()) || 0; })
+          .get();
+
+      const dataTemperatur = edit_time.map((taim, i) => ({
+        id_tempe: edit_id_tempe[i],
+        time: taim,
+        temperatur: edit_temperatur[i] || ""
+      }));
+
+      const formData = {
+        id: $('#edit_id').val(),
+        siklus: $('#edit_siklus').val(),
+        keterangan: $('#edit_keterangan').val(),
+        data_temperatur: dataTemperatur,
+      };
+
+      $.ajax({
+        url: '/api/m-siklus',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide');
+          table.draw('page');
+          alertModal[response.status](response.message);
+        },
+        error: function (xhr) {
+          if (xhr.status === 401) {
+            alert('Unauthorized. Please log in.');
+            location.reload();
+          } else {
+            alertModal['error']('Update gagal');
+            console.error(xhr.responseText);
+          }
+        }
+      });
+    });
+
+    $(document).on("click", ".delete-record", function(event){
+      event.preventDefault()
+      let $tr = $(this).closest('tr');
+      let rdata = table.row($tr).data();
+      // rdata = table.row($(this).closest('tr')).data()
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    })
+
+    $(document).on("submit", "#delete-form", function(event){
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/m-siklus', 
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-delete').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

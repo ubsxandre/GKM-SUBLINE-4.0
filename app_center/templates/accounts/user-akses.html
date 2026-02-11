@@ -1,0 +1,158 @@
+<!doctype html>
+
+<html
+  lang="en"
+  class="light-style layout-wide customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="static/assets/"
+  data-template="vertical-menu-template"
+  data-style="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Verifikasi Roles | GKM SUBLINE 4.0</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="static/assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link href="static/fonts/googleapis/font.css" rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="static/assets/vendor/fonts/remixicon/remixicon.css" />
+    <link rel="stylesheet" href="static/assets/vendor/fonts/flag-icons.css" />
+
+    <!-- Menu waves for no-customizer fix -->
+    <link rel="stylesheet" href="static/assets/vendor/libs/node-waves/node-waves.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="static/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="static/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="static/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="static/assets/vendor/libs/typeahead-js/typeahead.css" />
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="static/assets/vendor/css/pages/page-auth.css" />
+
+    <!-- Helpers -->
+    <script src="static/assets/vendor/js/helpers.js"></script>
+    <script src="static/assets/vendor/js/template-customizer.js"></script>
+    <script src="static/assets/js/config.js"></script>
+    <script src="static/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="static/assets/vendor/libs/axios/axios.min.js"></script>
+
+  </head>
+
+  <body>
+    <!-- Content -->
+
+    <div class="authentication-wrapper authentication-cover">
+      <!-- Logo -->
+      <a href="index.html" class="auth-cover-brand d-flex align-items-center gap-2">
+        <span class="app-brand-logo demo">
+          <img src="/static/assets/img/logo/ubs-logo-gold.png" class="mx-2" alt="" width="30">
+        </span>
+        <span class="app-brand-text demo text-heading fw-semibold">GKM SUBLINE 4.0</span>
+      </a>
+      <!-- /Logo -->
+      <div class="authentication-inner row m-0">
+        <!-- /Left Section -->
+        <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center justify-content-center p-12 pb-2">
+          <img
+            src="static/assets/img/illustrations/auth-verify-email-illustration-light.png"
+            class="auth-cover-illustration w-100"
+            alt="auth-illustration"
+            data-app-light-img="illustrations/auth-verify-email-illustration-light.png"
+            data-app-dark-img="illustrations/auth-verify-email-illustration-dark.png" />
+          <img
+            src="static/assets/img/illustrations/auth-cover-login-mask-light.png"
+            class="authentication-image"
+            alt="mask"
+            data-app-light-img="illustrations/auth-cover-login-mask-light.png"
+            data-app-dark-img="illustrations/auth-cover-login-mask-dark.png" />
+        </div>
+        <!-- /Left Section -->
+
+        <!--  Verify email -->
+        <div
+          class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg position-relative py-sm-12 px-12 py-6">
+          <div class="w-px-400 mx-auto pt-5 pt-lg-0">
+            <h4 class="mb-1">Verify your Account ✉️</h4>
+            <p class="text-start mb-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque error dolores ullam natus voluptatibus vel incidunt sunt iste doloribus? Ut ducimus, porro facilis atque pariatur aut voluptatum optio accusantium accusamus?
+            </p>
+            <a class="btn btn-primary w-100 my-5" id="logout" href="javascript:void(0)"> Sudah Diverifikasi ? </a>
+            <!-- <p class="text-center">
+              Didn't get the mail?
+              <a href="javascript:void(0);"> Resend </a>
+            </p> -->
+          </div>
+        </div>
+        <!-- / Verify email -->
+      </div>
+    </div>
+
+    <script>
+      function redirectLogin(){
+        window.location.href = '/login'
+      }
+
+      $(document).ready(function () {
+        
+        $('#logout').on('click', function (event) {
+          event.preventDefault();
+          
+          axios.post('/api/logout', {
+
+          })
+            .then(function (response) {
+              if(response.data.status=='success'){
+                $('#flash').html(redirectLogin(response.data.message, 'success'))
+                setTimeout(redirectDashboard, 1000)
+              }
+            })
+            .catch(function (error) {
+              if (error.response) {
+                $('#message').text(error.response.data.message);
+                $('#flash').html(htmlFlash(error.response.data.message, 'danger'))
+              } else {
+                $('#message').text('An error occurred.');
+              }
+            });
+        });
+      });
+    </script>
+
+    <!-- / Content -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="static/assets/vendor/libs/popper/popper.js"></script>
+    <script src="static/assets/vendor/js/bootstrap.js"></script>
+    <script src="static/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="static/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="static/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="static/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="static/assets/vendor/js/menu.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <!-- Main JS -->
+    <script src="static/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+  </body>
+</html>

@@ -1,0 +1,401 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Mesin {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Mesin</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap"> 
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Mesin
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>Bagian</th>
+                <th>Nomer Mesin</th>
+                <th>Keterangan</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Mesin</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="add_bagian" aria-label="Default select example" required>
+                </select>
+                <label for="add_bagian">Bagian</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_no_mesin" class="form-control" placeholder="Enter Nomer Mesin">
+                <label for="add_no_mesin">Nomer Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_keterangan" class="form-control" placeholder="Enter Keterangan">
+                <label for="add_keterangan">Nomer Keterangan</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Mesin</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="detail-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_bagian" class="form-control" placeholder="Enter Bagian" required readonly>
+                <label for="detail_bagian">Bagian</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_no_mesin" class="form-control" placeholder="Enter Mesin" required readonly>
+                <label for="detail_no_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_keterangan" class="form-control" placeholder="Enter Keterangan" required readonly>
+                <label for="detail_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Proses</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit_id" name="id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_bagian" aria-label="Default select example" readonly required>
+                </select>
+                <label for="edit_bagian">Bagian</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_no_mesin" name="no_mesin" class="form-control" placeholder="Enter Nomer Mesin" required>
+                <label for="edit_no_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_keterangan" name="cycle_time" class="form-control" placeholder="Enter Keterangan" required>
+                <label for="edit_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+			<div class="modal-header flex-column">
+				<div class="icon-box">
+					<i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+				</div>						
+				<h4 class="modal-title w-100">Are you sure?</h4>	
+			</div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+		</div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(async function () {
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: true,
+      order: [[0, 'desc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/m-mesin",
+        data: function(sc){
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        // {data: 'id'},
+        {data: 'bagian'},
+        {data: 'no_mesin'},
+        {data: 'keterangan'},
+        {
+          orderable: false,
+          className: 'control',
+          data:null,
+          render:function(data){
+            return `
+              <div class="d-flex align-items-center">
+                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
+      ]
+    }); table.on('draw', function() {initializeTooltips();});
+
+    $(document).on("click", ".detail-record", function(event){
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      // console.log("ISI DETAIL : ", rdata)
+      $('#detail_id').val(rdata.id)
+      $('#detail_bagian').val(rdata.bagian)
+      $('#detail_no_mesin').val(rdata.no_mesin)
+      $('#detail_keterangan').val(rdata.keterangan)
+
+      $('#modal-detail').modal('show')
+    })
+  
+    $(document).on("click", ".add-record", function(event) {
+      event.preventDefault();
+      dropdownBagian()
+      $('#modal-add').modal('show');
+    });
+
+    $(document).on("submit", "#add-form", function(event){
+      event.preventDefault();      
+      const formData = {
+        id_bagian: $('#add_bagian').val(),
+        no_mesin: $('#add_no_mesin').val(),
+        keterangan: $('#add_keterangan').val(),
+      };
+
+      $.ajax({
+        url: '/api/m-mesin', 
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#add-form')[0].reset();
+          $('#modal-add').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+    $(document).on("click", ".edit-record", async function(event){
+      event.preventDefault();
+      const rdata = table.row($(this).closest('tr')).data();
+
+      $('#edit_id').val(rdata.id);
+      // $('#edit_bagian').val(rdata.bagian);
+      $.ajax({
+        url: '/api/m-bagian',
+        type: 'GET',
+        success: function(response) {
+          option_bagian = `<option value=""> Choose One </option>`;
+          for(bag of response.data) {
+            if(bag.id == rdata.id_bagian){
+              option_bagian += `<option value="${bag.id}" selected>${bag.bagian}</option>`;
+            } else{
+              option_bagian += `<option value="${bag.id}">${bag.bagian}</option>`;
+            }
+          }
+          $("#edit_bagian").html(option_bagian);
+        }
+      })
+      $('#edit_no_mesin').val(rdata.no_mesin);
+      $('#edit_keterangan').val(rdata.keterangan);
+
+      $('#modal-edit').modal('show');
+    });
+
+    $(document).on("submit", "#edit-form", function(event){
+      event.preventDefault();
+      const formData = {
+        id: $('#edit_id').val(),
+        id_bagian: $('#edit_bagian').val(),
+        no_mesin: $('#edit_no_mesin').val(),
+        keterangan: $('#edit_keterangan').val(),
+      };
+
+      $.ajax({
+        url: '/api/m-mesin', 
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+      $('#modal-edit').modal('show')      
+    })
+
+    $(document).on("click", ".delete-record", function(event){
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    })
+
+    $(document).on("submit", "#delete-form", function(event){
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/m-mesin', 
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-delete').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+
+  // KUMPULAN FUNCTION
+  function dropdownBagian() {
+     $.ajax({
+        url: '/api/m-bagian',
+        method: 'POST',
+        data: { mode: 'dropdown' },
+        success: function (response) {
+          option_bags = `<option value=""> Choose One </option>`;
+          for (bag of response.data) {
+            option_bags += `<option value="${bag.id}">${bag.bagian}</option>`
+          }
+          $("#add_bagian").html(option_bags)
+        }
+      });
+  }
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

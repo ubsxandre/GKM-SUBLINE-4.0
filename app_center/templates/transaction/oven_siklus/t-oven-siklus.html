@@ -1,0 +1,563 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Transaction Oven {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+  <div class="card card-action mb-4">
+    <div class="card-header">
+      <h5 class="card-action-title mb-0">Filter Oven</h5>
+      <div class="card-action-element">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <a href="javascript:void(0);" class="card-collapsible">
+              <i class="tf-icons ri-arrow-up-s-line"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="collapse show">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6 mb-4 mt-2">
+            <div class="form-floating form-floating-outline">
+              <div class="form-floating form-floating-outline">
+                <input class="form-control form-control-sm" type="date" id="filter_start_date" onclick="document.getElementById('filter_start_date').showPicker()">
+                <label for="filter_start_date">Start Date</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 mb-4 mt-2">
+            <div class="form-floating form-floating-outline">
+              <div class="form-floating form-floating-outline">
+                <input class="form-control form-control-sm" type="date" id="filter_end_date" onclick="document.getElementById('filter_end_date').showPicker()">
+                <label for="filter_end_date">End Date</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 mb-4 mt-2">
+            <div class="form-floating form-floating-outline mb-3">
+              <select class="form-select form-select-sm select2" id="filter_no_mesin">
+              </select>
+              <label for="filter_no_mesin">Nomer Mesin</label>
+            </div>
+          </div>
+          <!-- <div class="col-lg-6 mb-4 mt-2">
+            <div class="form-floating form-floating-outline mb-3">
+              <select class="form-select form-select-sm select2" id="filter_status">
+              </select>
+              <label for="filter_status">Status</label>
+            </div>
+          </div> -->
+        </div>
+
+        <div class="dt-action-buttons text-end pt-3 pt-md-0">
+          <div class="dt-buttons btn-group flex-wrap">
+            <button type="button" class="btn btn-secondary waves-effect waves-light add-record">
+              <i class="ri-refresh-line ri-16px me-sm-2"></i> Reset
+            </button>
+            <!-- <button type="button" class="btn btn-success waves-effect waves-light" id="button-export-excel">
+              <i class="ri-download-line ri-16px me-sm-2"></i> Excel
+            </button> -->
+            <button type="button" class="btn btn-primary waves-effect waves-light" id="button-search">
+              <i class="ri-search-line ri-16px me-sm-2"></i> Cari
+            </button>
+          </div>
+        </div>
+
+        <script>
+          
+        </script>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Transaction Oven</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap"> 
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Transaction
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>ID</th>
+                <th>Mesin</th>
+                <th>Siklus</th>
+                <th>Status</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Time (Jam)</th>
+                <th>Temperatur (°C)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;">
+  <div class="modal-dialog modal-l" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Transaction</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <!-- <input type="text" id="add_mesin" class="form-control" placeholder="Enter Mesin" required> -->
+                <select class="form-select form-select-sm select2" id="add_mesin"></select>
+                <label for="add_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="add_siklus"></select>
+                <label for="add_siklus">Siklus</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_keterangan" class="form-control" placeholder="Enter Keterangan">
+                <label for="add_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        <script>
+          function dropdownMesin(){
+            $.ajax({
+              url: '/api/m-mesin',
+              method: 'POST',
+              data: { mode: 'dropdown' },
+              success: function (response) {
+                option_mes = `<option value=""> Choose One </option>`;
+                for (loc of response.data) {
+                  option_mes += `<option value="${loc.no_mesin}">${loc.no_mesin}</option>`
+                }
+                $("#add_mesin").html(option_mes)
+              }
+            });
+          };
+
+          function dropdownSiklus(){
+            $.ajax({
+              url: '/api/m-siklus',
+              method: 'POST',
+              data: { mode: 'dropdown' },
+              success: function (response) {
+                option_sik = `<option value=""> Choose One </option>`;
+                for (loc of response.data) {
+                  option_sik += `<option value="${loc.siklus}">${loc.siklus}</option>`
+                }
+                $("#add_siklus").html(option_sik)
+              }
+            });
+          };
+
+        </script>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" aria-labelledby="modal-detail-label" aria-hidden="true">
+  <div class="modal-dialog modal-l">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Detail</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" aria-labelledby="modal-edit-label" aria-hidden="true">
+  <div class="modal-dialog modal-l">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-edit-title">Edit Siklus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="edit-form">
+        <div class="modal-body" id="modal-edit-body">
+          <input type="hidden" id="edit_id">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_mesin" class="form-control" placeholder="Enter Mesin" readonly>
+                <label for="edit_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_siklus"></select>
+                <label for="edit_siklus">Siklus</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_keterangan" class="form-control" placeholder="Enter Keterangan">
+                <label for="edit_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          function fetchDropdownSiklusEdit(data) {
+            $.ajax({
+              url: '/api/m-siklus',
+              method: 'post',
+              data: {mode:'dropdown',},
+              success: function (response) {
+                let option = `<option selected disabled value="">Pilih Siklus</option>`; 
+                for (lus of response.data) {
+                  if (data.siklus == lus.siklus){
+                    option += `<option value="${lus.siklus}" selected>${lus.siklus}</option>`
+                  } else{
+                    option += `<option value="${lus.siklus}">${lus.siklus}</option>`;
+                  }
+                }
+                  $("#edit_siklus").html(option)
+              },
+            });
+          }
+        </script>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+			<div class="modal-header flex-column">
+				<div class="icon-box">
+					<i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+				</div>						
+				<h4 class="modal-title w-100">Are you sure?</h4>	
+			</div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+		</div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    dropdownMesin();
+    dropdownSiklus();
+
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: true,
+      order: [[0, 'desc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/t-oven-siklus",
+        data: function(sc){
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        // {data: 'id'},
+        {
+          orderable: false,
+          className: 'control',
+          data:null,
+          render:function(data){
+            const showEdit = data.status === "WAIT TRIGGER";
+            return `
+              <div class="d-flex align-items-center">
+                ${ showEdit ? `<a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"> <i class="ri-edit-box-line text-primary"></i> </a>` : `` }
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
+        {data: 'id'},
+        {data: 'no_mesin'},
+        {data: 'siklus'},
+        {
+          data: null,
+          render: function(data, type, row) {
+            console.log('KONTOL', data.status)
+            return data.status
+          }
+        },
+        {data: 'waktu_mulai'},
+        {data: 'waktu_selesai'},
+        {data: 'time'},
+        {data: 'temperatur'},
+      ],
+      drawCallback: function () {
+        let api = this.api();
+        let rows = api.rows({ page: 'current' }).nodes();
+
+        let lastKey = null;
+        let startRow = 0;
+        let rowspan = 1;
+
+        api.rows({ page: 'current' }).data().each(function (rowData, i) {
+
+          // KEY HARUS JELAS & STABIL
+          let key = rowData.no_mesin + '|' + rowData.siklus;
+
+          if (lastKey === key) {
+            rowspan++;
+
+            $(rows[i]).find('td').eq(0).remove();
+            $(rows[i]).find('td').eq(0).remove();
+            $(rows[i]).find('td').eq(0).remove();
+            $(rows[i]).find('td').eq(0).remove();
+            $(rows[i]).find('td').eq(0).remove();
+            $(rows[i]).find('td').eq(0).remove();
+            $(rows[i]).find('td').eq(0).remove();
+
+          } else {
+            if (rowspan > 1) {
+              $(rows[startRow]).find('td').eq(0).attr('rowspan', rowspan);
+              $(rows[startRow]).find('td').eq(1).attr('rowspan', rowspan);
+              $(rows[startRow]).find('td').eq(2).attr('rowspan', rowspan);
+              $(rows[startRow]).find('td').eq(3).attr('rowspan', rowspan);
+              $(rows[startRow]).find('td').eq(4).attr('rowspan', rowspan);
+              $(rows[startRow]).find('td').eq(5).attr('rowspan', rowspan);
+              $(rows[startRow]).find('td').eq(6).attr('rowspan', rowspan);
+            }
+
+            lastKey = key;
+            startRow = i;
+            rowspan = 1;
+          }
+        });
+
+        // set rowspan untuk grup terakhir
+        if (rowspan > 1) {
+          $(rows[startRow]).find('td').eq(0).attr('rowspan', rowspan);
+          $(rows[startRow]).find('td').eq(1).attr('rowspan', rowspan);
+          $(rows[startRow]).find('td').eq(2).attr('rowspan', rowspan);
+          $(rows[startRow]).find('td').eq(3).attr('rowspan', rowspan);
+          $(rows[startRow]).find('td').eq(4).attr('rowspan', rowspan);
+          $(rows[startRow]).find('td').eq(5).attr('rowspan', rowspan);
+          $(rows[startRow]).find('td').eq(6).attr('rowspan', rowspan);
+        }
+      }
+    }); table.on('draw', function() {initializeTooltips();});
+
+    const socket = io();
+
+    socket.on('update_status_oven', function(data) {
+      iqup = data.data
+      console.log('MEMEK', iqup)
+      let updated = false;
+      table.rows().every(function() {
+        const rowData = this.data();
+        console.log('Puki', rowData.id)
+        console.log('Pepek', iqup.id)
+        if (rowData.id === iqup.id) {
+          rowData.status = iqup.status;
+          this.data(rowData).draw(false);
+          updated = true;
+        }
+      });
+    });
+
+
+    $(document).on("click", ".add-record", function(event) {
+      event.preventDefault()
+    });
+
+    $(document).on("submit", "#add-form", function(event){
+      event.preventDefault();
+
+      const formData = {
+        no_mesin: $('#add_mesin').val(),
+        siklus: $('#add_siklus').val(),
+        status: 'WAIT TRIGGER',
+        keterangan: $('#add_keterangan').val(),
+      };     
+      $.ajax({
+        url: '/api/t-oven-siklus', 
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#add-form')[0].reset();
+          // $('#add-temperatur-wrapper').html('');
+          $('#modal-add').modal('hide');
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      }); 
+
+    });
+
+    $(document).on("click", ".edit-record", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      let $tr = $(this).closest('tr');
+      let data = table.row($tr).data();
+      console.log(data);
+      fetchDropdownSiklusEdit(data);
+
+      if (!data) {
+        let idx = table.row($tr).index();
+        data = table.row(idx - 1).data();
+      }
+
+      if (!data) {
+        alert('Data tidak ditemukan');
+        return;
+      }
+
+      $('#edit_id').val(data.id || '');
+      $('#edit_mesin').val(data.no_mesin || '');
+      // $('#edit_siklus').val(String(data.siklus)).trigger('change');
+      $('#edit_keterangan').val(data.keterangan || '');
+
+      $('#modal-edit').modal('show');
+    });
+
+    $(document).on("submit", "#edit-form", function (event) {
+      event.preventDefault();
+
+      const formData = {
+        id: $('#edit_id').val(),
+        no_mesin: $('#edit_mesin').val(),
+        siklus: $('#edit_siklus').val(),
+        keterangan: $('#edit_keterangan').val(),
+      };
+      $.ajax({
+        url: '/api/t-oven-siklus', 
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+      $('#modal-edit').modal('show')    
+    });
+
+    $(document).on("click", ".delete-record", function(event){
+      event.preventDefault()
+      let $tr = $(this).closest('tr');
+      let rdata = table.row($tr).data();
+      // rdata = table.row($(this).closest('tr')).data()
+      console.log('MEMEK', rdata);
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    });
+
+    $(document).on("submit", "#delete-form", function(event){
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/t-oven-siklus', 
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-delete').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,615 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Access {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Access</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap">
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Access
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Page</th>
+                <th>Access</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Access</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="role" aria-label="Default select example" required>
+                </select>
+                <label for="role">Role</label>
+              </div>
+            </div>
+          </div>
+          <script>
+            function fetchDropdownRoles() {
+              $.ajax({
+                url: '/api/m-roles',
+                method: 'POST',
+                data: { mode: 'dropdown' },
+                success: function (response) {
+                  option_roles = `<option value=""> Choose One </option>`;
+                  for (role of response.data) {
+                    option_roles += `<option value="${role.id}">${role.role}</option>`
+                  }
+                    $("#role").html(option_roles)
+                },
+              });
+            }
+          </script>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="page" aria-label="Default select example" required>
+                </select>
+                <label for="page">Page</label>
+              </div>
+            </div>
+          </div>
+          <script>
+            $(document).on("change", "#role", function (event) {
+              event.preventDefault()
+              id_role = $('#role').val()
+              $.ajax({
+                url: '/api/m-akses',
+                type: 'POST',
+                data: {id_role:id_role, mode:'dropdown_pagses'},
+                success: function (response) {
+                  // console.log(response.data)
+                  option_page = `<option value=""> Choose One </option>`;
+                  for (page of response.data) {
+                    option_page += `<option value="${page.page}">${page.page}</option>`
+                  }
+                    $("#page").html(option_page)
+                },
+                error: function (xhr, status, error) {
+                  alert('Unauthorized. Please log in.')
+                  location.reload();
+                }
+              });
+            });
+          </script>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select id="akses" class="select2 form-select" multiple required>
+                </select>
+                <label for="akses">Akses</label>
+              </div>
+            </div>
+          </div>
+          <script>
+            $(document).on("change", "#page", function (event) {
+              event.preventDefault()
+              id_role = $('#role').val()
+              page = $('#page').val()
+              $.ajax({
+                url: '/api/m-akses',
+                type: 'POST',
+                data: {id_role:id_role, page:page, mode:'dropdown_akseses'},
+                success: function (response) {
+                  var aksesObj = {
+                    C: 'Create',
+                    R: 'Read',
+                    U: 'Update',
+                    D: 'Delete'
+                  };
+                  option_akses = `<option value=""> Choose One </option>`;
+                      for (access of response.data) {
+                        option_akses += `<option value="${access.id}-${access.crud}">${aksesObj[access.crud]}</option>`
+                      }
+                      $("#akses").html(option_akses)
+                },
+                error: function (xhr, status, error) {
+                  alert('Unauthorized. Please log in.')
+                  location.reload();
+                }
+              });
+            });
+          </script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Pages</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select" id="detail_role" aria-label="Default select example" required>
+                </select>
+                <label for="detail_role">Role</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select" id="detail_page" aria-label="Default select example" required>
+                </select>
+                <label for="detail_page">Page</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select id="detail_akses" class="form-select" required>
+                  <option value="C">Create</option>
+                  <option value="R">Read</option>
+                  <option value="U">Update</option>
+                  <option value="D">Delete</option>
+                </select>
+                <label for="detail_akses">Akses</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Access</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit_id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_role" aria-label="Default select example" required>
+                </select>
+                <label for="edit_role">Role</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_page" aria-label="Default select example" required>
+                </select>
+                <label for="edit_page">Page</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select id="edit_akses" class="form-select" required>
+                  <!-- <option value="C">Create</option>
+                  <option value="R">Read</option>
+                  <option value="U">Update</option>
+                  <option value="D">Delete</option> -->
+                </select>
+                <label for="edit_akses">Akses</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          $(document).on("change", "#edit_page", function (event) {
+            event.preventDefault()
+            $('#edit_akses').val(null).trigger('change');
+            data = $(this).val()
+            // console.log(data)
+            $.ajax({
+              url: '/api/m-pages',
+              type: 'GET',
+              contentType: 'application/json',
+              data: {id:'', page:data},
+              success: function (response) {
+                var aksesObj = {
+                  C: 'Create',
+                  R: 'Read',
+                  U: 'Update',
+                  D: 'Delete'
+                };
+                option_akses = `<option value=""> Choose One </option>`;
+                for (access of response.data) {
+                  option_akses += `<option value="${access.id}-${access.crud}">${aksesObj[access.crud]}</option>`
+                }
+                $("#edit_akses").html(option_akses)
+              },
+              error: function (xhr, status, error) {
+                alert('Unauthorized. Please log in.')
+                location.reload();
+              }
+            });
+          })
+        </script>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+      <script>
+        function fetchDropdownEdit(rdata) {
+          var roles = $.ajax({
+            url: '/api/m-roles',
+            method: 'POST',
+            data: { mode: 'dropdown' },
+          });
+
+          var pages = $.ajax({
+            url: '/api/m-pages',
+            method: 'POST',
+            data: { mode: 'dropdown' }
+          });
+
+          // Wait for both AJAX requests to complete
+          $.when(roles, pages).done(function (roles, pages) {
+            option_roles = ''
+            for (role of roles[0].data) {
+              if(role.id == rdata.id_role){
+                option_roles += `<option selected value="${role.id}">${role.role}</option>`
+              }else{
+                option_roles += `<option value="${role.id}">${role.role}</option>`
+              }
+            }
+
+            option_pages = ''
+            for (page of pages[0].data) {
+              if(page.page == rdata.page){
+                option_pages += `<option selected value="${page.page}">${page.page}</option>`
+              }else{
+                option_pages += `<option value="${page.page}">${page.page}</option>`
+              }
+            }
+
+            $('#edit_role').html(option_roles)
+            $('#edit_page').html(option_pages)
+
+            // Combine or process both datasets here
+          }).fail(function (error) {
+            console.error('Error fetching data:', error);
+          });
+        }
+      </script>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+      <div class="modal-header flex-column">
+        <div class="icon-box">
+          <i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+        </div>
+        <h4 class="modal-title w-100">Are you sure?</h4>
+      </div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+    function mergeCells(tableId, columnIndex) {
+      var rows = $(tableId + ' tbody tr');
+      var previousText = null;
+      var previousRow = null;
+      var rowspan = 1;
+
+      rows.each(function (index, row) {
+        var currentText = $(row).find(`td.${columnIndex}`).text();  // Get text of the current cell in the target column
+        if (previousText === null) {
+          // First row: set previousText
+          previousText = currentText;
+          previousRow = row;
+        } else if (previousText === currentText) {
+          // If current text matches previous row's text, increase rowspan
+          rowspan++;
+          $(row).find(`td.${columnIndex}`).remove();  // Remove the current cell as it's being merged
+        } else {
+          // If text differs, set rowspan for previous row and reset variables
+          if (rowspan > 1) {
+            $(previousRow).find(`td.${columnIndex}`).attr('rowspan', rowspan);  // Apply rowspan to the first cell
+          }
+          previousText = currentText;
+          previousRow = row;
+          rowspan = 1;  // Reset rowspan
+        }
+      });
+
+      // Apply rowspan to the last group if there were multiple identical rows
+      if (rowspan > 1) {
+        $(previousRow).find(`td.${columnIndex}`).attr('rowspan', rowspan);
+      }
+    }
+
+
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: true,
+      order: [[0, 'desc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/m-akses",
+        data: function (sc) {
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        { data: 'role', class: 'c_role' },
+        { data: 'page', class: 'c_page' },
+        {
+          data: null,
+          render: function (data) {
+            var akses = data.akses
+            var aksesObj = {
+              C: 'Create',
+              R: 'Read',
+              U: 'Update',
+              D: 'Delete'
+            };
+            if (data.akses != null) {
+              return `${aksesObj[akses]} `
+            } else {
+              return `-`
+            }
+
+          }
+        },
+        {
+          orderable: false,
+          className: 'control',
+          data: null,
+          render: function (data) {
+            return `
+              <div class="d-flex align-items-center">
+                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
+      ],
+      drawCallback: function (settings) {
+        // Call the function to merge rows based on the first column (Category in this case)
+        mergeCells('#datatable', 'c_role');  // Merge cells in the first column (index 0 or [0,1])
+        mergeCells('#datatable', 'c_page');  // Merge cells in the first column (index 0 or [0,1])
+      },
+
+    }); table.on('draw', function () { initializeTooltips(); });
+
+    $(document).on("click", ".add-record", function (event) {
+      event.preventDefault()
+      fetchDropdownRoles()
+      $('#modal-add').modal('show')
+      $('#akses').val(null).trigger('change');
+    })
+
+    $(document).on("submit", "#add-form", function (event) {
+      event.preventDefault()
+      list_crud = $('#akses').val()
+      akses = []
+      id_page = []
+      for(row of list_crud ){
+        akses.push(row.split('-')[1])
+        id_page.push(row.split('-')[0])
+      }
+      akses = String(akses)
+      id_page = String(id_page)
+      const formData = {
+        id_role: $('#role').val(),
+        id_page: id_page,
+        akses: akses,
+      };
+      $.ajax({
+        url: '/api/m-akses',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#add-form')[0].reset();
+          $('#modal-add').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+          $('#akses').val(null).trigger('change');
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+    $(document).on("click", ".detail-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      option_role = `<option selected value="${rdata.role}">${rdata.role}</option>`
+      option_page = `<option selected value="${rdata.page}">${rdata.page}</option>`
+      $('#detail_role').html(option_role)
+      $('#detail_page').html(option_page)
+      $('#detail_akses').val(rdata.akses).trigger('change')
+      $('#modal-detail').modal('show')
+    })
+
+    $(document).on("click", ".edit-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      fetchDropdownEdit(rdata)
+      $.ajax({
+        url: '/api/m-pages',
+        type: 'GET',
+        contentType: 'application/json',
+        data: {id:'', page:rdata.page},
+        success: function (response) {
+          var aksesObj = {
+            C: 'Create',
+            R: 'Read',
+            U: 'Update',
+            D: 'Delete'
+          };
+          option_akses = `<option value=""> Choose One </option>`;
+          for (access of response.data) {
+            if(access.crud == rdata.akses){
+              option_akses = `<option value="${rdata.akses}" selected>${aksesObj[rdata.akses]} </option>`;
+            }else{
+              option_akses += `<option value="${access.crud}">${aksesObj[access.crud]} </option>`
+            }
+          }
+          $("#edit_akses").html(option_akses)
+        }
+      });
+      $('#modal-edit').modal('show')
+    })
+
+    $(document).on("submit", "#edit-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id: $('#edit_id').val(),
+        id_role: $('#edit_role').val(),
+        id_page: $('#edit_page').val(),
+        akses: $('#edit_akses').val(),
+      };
+      $.ajax({
+        url: '/api/m-akses',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+      $('#modal-edit').modal('show')
+    })
+
+    $(document).on("click", ".delete-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    })
+
+    $(document).on("submit", "#delete-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/m-akses',
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#modal-delete').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+
+
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

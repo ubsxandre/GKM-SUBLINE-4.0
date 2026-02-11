@@ -1,0 +1,455 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard Oven Moule {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<link rel="stylesheet" href="static/assets/vendor/libs/spinkit/spinkit.css" />
+
+<script src="static/assets/vendor/libs/block-ui/block-ui.js"></script>
+<script src="{{ url_for('static', filename='range-tanggal/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='range-tanggal/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='range-tanggal/daterangepicker.min.js') }}"></script>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='range-tanggal/daterangepicker.css') }}">
+
+
+<style>
+  /* ===== Metric Color ===== */
+  .density { background-color: #D4C1EC !important; color: #000; }
+  .utility { background-color: #A8D0E6 !important; color: #000; }
+  .oee     { background-color: #B8E0D2 !important; color: #000; }
+
+  /* ===== Legend ===== */
+  .legend-wrap {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend-box {
+    width: 24px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  .legend-now { background-color: #005b8f; }
+  .legend-set { background-color: #d9534f; }
+  .legend-siklus { background-color: #0c9200; }
+
+  .legend-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+  }
+
+  /* ===== Responsive Card ===== */
+  .card-oee { width: 100%; }
+  @media (min-width: 576px) { .card-oee { width: 50%; } }
+  @media (min-width: 992px) { .card-oee { width: 25%; } }
+
+  /* ===== Chart Area ===== */
+  .chartdiv {
+    width: 100%;
+    height: 280px;
+    min-height: 220px;
+  }
+
+  @media (min-width: 992px) {
+    .chartdiv {
+      height: 320px;
+    }
+  }
+
+  /* ===== Per-Chart Loader ===== */
+  .chart-wrap {
+    position: relative;
+  }
+
+  .chart-loader {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(2px);
+    color: #444;
+    z-index: 2;
+  }
+
+  .chart-loader .loader-text {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .chart-loader .sk-fading-circle {
+    width: 36px;
+    height: 36px;
+  }
+</style>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+  <div class="card card-action mb-4" id="full">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Dashboard Oven Moule</h5>
+      <a href="javascript:void(0);" class="card-collapsible">
+        <i class="tf-icons ri-arrow-up-s-line"></i>
+      </a>
+    </div>
+
+    <div class="collapse show">
+      <div class="card-body">
+
+        <div class="row align-items-center gy-3">
+          
+          <!-- Legend -->
+          <div class="col-lg-6">
+            <div class="legend-wrap">
+              <div class="legend-item" title="Temperatur Now">
+                <span class="legend-box legend-now"></span>
+                <span class="legend-label">Temperatur Now</span>
+              </div>
+              <div class="legend-item" title="Temperatur Set">
+                <span class="legend-box legend-set"></span>
+                <span class="legend-label">Temperatur Set</span>
+              </div>
+              <div class="legend-item" title="Temperatur Siklus">
+                <span class="legend-box legend-siklus"></span>
+                <span class="legend-label">Temperatur Siklus</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter -->
+          <div class="col-lg-6 d-flex justify-content-lg-end">
+            <div class="input-group input-group-sm" style="max-width: 320px;">
+              <button type="button" class="btn btn-secondary" onclick="toggleFullScreen(document.getElementById('full'))">
+                <i class="ri-fullscreen-line"></i>
+              </button>
+              <span class="input-group-text">
+                <i class="ri-calendar-event-line"></i>
+              </span>
+              <input type="text" class="form-control" name="filter_tanggal" placeholder="Pilih Range Tanggal" id="filter_tanggal" />
+              <script>
+                $(function () {
+                  const today = moment();
+
+                  function setDefaultDate() {
+                    $('#filter_tanggal').val(
+                      today.format('YYYY-MM-DD') + ' - ' + today.format('YYYY-MM-DD')
+                    );
+                  }
+
+                  $('#filter_tanggal').daterangepicker({
+                    autoUpdateInput: false,
+                    maxDate: moment(),
+                    startDate: today,
+                    endDate: today,
+                    locale: {
+                      format: 'YYYY-MM-DD',
+                      separator: ' - ',
+                      applyLabel: 'Pilih',
+                      cancelLabel: 'Batal',
+                      daysOfWeek: ['Mg','Sn','Sl','Rb','Km','Jm','Sb'],
+                      monthNames: [
+                        'Januari','Februari','Maret','April','Mei','Juni',
+                        'Juli','Agustus','September','Oktober','November','Desember'
+                      ],
+                      firstDay: 1
+                    }
+                  });
+
+                  setDefaultDate(); // ← default hari ini
+                });
+              </script>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row g-3" id="oven-container">
+        <!-- dinamis lewat JS -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- SCRIPT CHART -->
+<script>
+  
+</script>
+
+<script type="text/javascript">
+  let last_selected_date = '';
+
+  function renderMesinList(list) {
+    const container = $('#oven-container');
+    container.empty();
+
+    list.forEach(function (item, idx) {
+      const label = (item && item.no_mesin) ? item.no_mesin : ('Mesin ' + (idx + 1));
+      const domId = 'chart-' + (idx + 1);
+
+      const card = `
+        <div class="col-lg-6 col-md-6 col-sm-12" id="view${idx + 1}">
+          <div class="card h-100">
+            <div class="card-body text-center">
+              <h6 class="mb-2">${label}</h6>
+              <div class="chart-wrap">
+                <div class="chart-loader" id="loader-${domId}">
+                  <div class="sk-fading-circle">
+                    <div class="sk-circle1 sk-circle"></div>
+                    <div class="sk-circle2 sk-circle"></div>
+                    <div class="sk-circle3 sk-circle"></div>
+                    <div class="sk-circle4 sk-circle"></div>
+                    <div class="sk-circle5 sk-circle"></div>
+                    <div class="sk-circle6 sk-circle"></div>
+                    <div class="sk-circle7 sk-circle"></div>
+                    <div class="sk-circle8 sk-circle"></div>
+                    <div class="sk-circle9 sk-circle"></div>
+                    <div class="sk-circle10 sk-circle"></div>
+                    <div class="sk-circle11 sk-circle"></div>
+                    <div class="sk-circle12 sk-circle"></div>
+                  </div>
+                  <div class="loader-text">Loading...</div>
+                </div>
+                <div class="chartdiv" id="${domId}" data-mesin="${label}"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      container.append(card);
+    });
+  }
+
+  function listMesin(start_date, end_date){
+    return $.ajax({
+      url: '/api/m-mesin',
+      method: 'POST',
+      data: {
+        mode: 'mesin_oven_dashboard',
+      },
+    }).then(function (response) {
+      const list = (response && response.data) ? response.data : [];
+      renderMesinList(list);
+      return list;
+    }).catch(function () {
+      console.error('Gagal load list mesin');
+      return [];
+    });
+  }
+
+  function renderDashboard(start_date, end_date, mesin) {
+    if (!mesin || !mesin.no_mesin) return;
+    const target = $('.chartdiv[data-mesin="' + mesin.no_mesin + '"]')[0];
+    if (target) {
+      $('#loader-' + target.id).show();
+    }
+    $.ajax({
+      url: '/api/dashboard-oven-moule',
+      method: 'POST',
+      data: {
+        mode: 'graph',
+        start_date: start_date,
+        end_date: end_date,
+        no_mesin: mesin.no_mesin
+      },
+      success: function (response) {
+        console.log('BERHASIL RENDER DASHBOARD');
+        const data = (response && response.data) ? response.data : [];
+        console.log(data);
+        renderCharts(data, mesin.no_mesin);
+        if (target) {
+          $('#loader-' + target.id).hide();
+        }
+      },
+      error: function () {
+        console.error('Gagal load dashboard');
+        if (target) {
+          $('#loader-' + target.id).hide();
+        }
+      }
+    });
+  }
+
+  function handleChangeTanggal() {
+    const val = $('#filter_tanggal').val();
+    if (!val) return;
+
+    const [startStr, endStr] = val.split(' - ');
+    const start = moment(startStr, 'YYYY-MM-DD');
+    const end   = moment(endStr, 'YYYY-MM-DD');
+
+    const diffDays = end.diff(start, 'days');
+    if (diffDays > 6) {
+      alert('RANGE TANGGAL MAKSIMAL 1 MINGGU!');
+      $('#filter_tanggal').val(last_selected_date);
+      return;
+    }
+
+    last_selected_date = val;
+    console.log(startStr, endStr);
+    listMesin(startStr, endStr).then(function (list) {
+      list.forEach(function (item) {
+        console.log('MEMEK', item)
+        renderDashboard(startStr, endStr, item);
+      });
+    });
+  }
+
+  $('#filter_tanggal').on('apply.daterangepicker', function (ev, picker) {
+    const start = picker.startDate.format('YYYY-MM-DD');
+    const end   = picker.endDate.format('YYYY-MM-DD');
+
+    $(this).val(start + ' - ' + end);
+    handleChangeTanggal();
+  });
+
+  $(document).ready(function () {
+    handleChangeTanggal();
+  });
+
+
+
+
+  function renderCharts(rows, mesinLabel) {
+    if (!window.am5 || !window.am5xy) {
+      console.error('amCharts belum ter-load.');
+      return;
+    }
+
+    const data = [];
+    rows.forEach(function (row) {
+      const mesin = row.no_mesin || '';
+      if (!mesin || (mesinLabel && mesin !== mesinLabel)) return;
+
+      const dateMs = new Date(row._time).getTime();
+      const tempNow = Number(row.TemperatureNow);
+      const tempSet = Number(row.TemperatureSet);
+      const tempSiklus = Number(row.temperatur);
+      if (!isFinite(dateMs) || !isFinite(tempNow) || !isFinite(tempSet)) return;
+
+      data.push({
+        date: dateMs,
+        temp_now: tempNow,
+        temp_set: tempSet,
+        temp_siklus: tempSiklus,
+        id_transaksi: row.id_transaksi
+      });
+    });
+
+    data.sort(function (a, b) { return a.date - b.date; });
+
+    const target = $('.chartdiv[data-mesin="' + mesinLabel + '"]')[0];
+    if (!target) return;
+
+    const el = target;
+    if (!data.length) {
+      $(el).html('<div class="text-muted small">Tidak ada data Transaksi Oven.</div>');
+    }
+
+    if (el.__am5root) {
+      el.__am5root.dispose();
+    }
+
+    const root = am5.Root.new(el);
+    root._logo.dispose();
+    el.__am5root = root;
+
+    root.setThemes([am5themes_Animated.new(root)]);
+
+    const chart = root.container.children.push(
+      am5xy.XYChart.new(root, {
+        panX: true,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX"
+      })
+    );
+
+    const xAxis = chart.xAxes.push(
+      am5xy.DateAxis.new(root, {
+        baseInterval: { timeUnit: "minute", count: 1 },
+        renderer: am5xy.AxisRendererX.new(root, {}),
+        tooltip: am5.Tooltip.new(root, {})
+      })
+    );
+    xAxis.set("tooltipDateFormat", "yyyy-MM-dd HH:mm:ss");
+
+    const yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        renderer: am5xy.AxisRendererY.new(root, {}),
+        tooltip: am5.Tooltip.new(root, {})
+      })
+    );
+
+    const seriesNow = chart.series.push(
+      am5xy.LineSeries.new(root, {
+        name: "TemperatureNow",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueXField: "date",
+        valueYField: "temp_now",
+        stroke: am5.color(0x005b8f),
+        tooltip: am5.Tooltip.new(root, { labelText: "ID: {id_transaksi}\n{name}: {valueY}" })
+      })
+    );
+
+    const seriesSet = chart.series.push(
+      am5xy.LineSeries.new(root, {
+        name: "TemperatureSet",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueXField: "date",
+        valueYField: "temp_set",
+        stroke: am5.color(0xd9534f),
+        tooltip: am5.Tooltip.new(root, { labelText: "ID: {id_transaksi}\n{name}: {valueY}" })
+      })
+    );
+
+    const seriesSetpoint = chart.series.push(
+      am5xy.LineSeries.new(root, {
+        name: "TemperaturSiklus",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueXField: "date",
+        valueYField: "temp_siklus",
+        stroke: am5.color(0x0c9200),
+        tooltip: am5.Tooltip.new(root, { labelText: "ID: {id_transaksi}\n{name}: {valueY}" })
+      })
+    );
+
+    seriesNow.data.setAll(data);
+    seriesSet.data.setAll(data);
+    seriesSetpoint.data.setAll(data);
+
+    chart.set("cursor", am5xy.XYCursor.new(root, { xAxis: xAxis }));
+  }
+
+</script>
+
+
+{% endblock content %}
+
+{% block javascripts %} {% endblock javascripts %}

@@ -1,0 +1,302 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Kategori Defect {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Kategori Defect</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap"> 
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Kategori Defect
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <!-- <th>id</th> -->
+                <th>Lokasi</th>
+                <!-- <th>Tray</th> -->
+                <th>Nomer Mesin</th>
+                <!-- <th>Cycle Time</th> -->
+                <th>Serial Number</th>
+                <th>Serial Number Gateway</th>
+                <th>Head</th>
+                <th>Max Voucher</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Kategori Defect</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_no_mesin" class="form-control" placeholder="Enter Nomer Mesin" required>
+                <label for="add_no_mesin">Nomer Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="add_cycle_time" class="form-control" placeholder="Enter Cycle Time">
+                <label for="add_cycle_time">Cycle Time</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="serial_number" aria-label="Default select example">
+                </select>
+                <label for="serial_number">Serial Number</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="div_head_mesin">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="head_mesin" aria-label="Default select example" required>
+                  <option value="SINGLE">SINGLE</option>
+                  <option value="DOUBLE">DOUBLE</option>
+                </select>
+                <label for="head_mesin">Head Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="max_voucher" aria-label="Default select example" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
+                <label for="max_voucher">Max Voucher</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row add-form-tray" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="tray" aria-label="Default select example">
+                </select>
+                <label for="tray">Tray</label>
+              </div>
+            </div>
+          </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Mesin</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="detail-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_no_mesin" class="form-control" placeholder="Enter Mesin" required readonly>
+                <label for="detail_no_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_cycle_time" class="form-control" placeholder="Enter Cycle Time" required readonly>
+                <label for="detail_cycle_time">Cycle Time</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_serial_number_gateway" class="form-control" placeholder="Enter Serial Number Gateway" required readonly>
+                <label for="detail_serial_number_gateway">Serial Number Gateway</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_serial_number" class="form-control" placeholder="Enter Serial Number" required readonly>
+                <label for="detail_serial_number">Serial Number</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_lokasi" class="form-control" placeholder="Enter Lokasi" required readonly>
+                <label for="detail_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_tray" class="form-control" placeholder="Enter Tray" required readonly>
+                <label for="detail_tray">Tray</label>
+              </div>
+            </div>
+          </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Proses</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit_id" name="id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_no_mesin" name="no_mesin" class="form-control" placeholder="Enter Nomer Mesin" required>
+                <label for="edit_no_mesin">Mesin</label>
+              </div>
+            </div>
+          </div>
+          <div class="row" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_cycle_time" name="cycle_time" class="form-control" placeholder="Enter Cycle Time" required>
+                <label for="edit_cycle_time">Cycle Time</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_serial_number" name="id_modul" aria-label="Default select example">
+                </select>
+                <label for="edit_serial_number">Serial Number</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_lokasi" name="id_lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="edit_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row edit-form-tray" hidden>
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select form-select-sm select2" id="edit_tray" name="id_tray" aria-label="Default select example">
+                </select>
+                <label for="edit_tray">Tray</label>
+              </div>
+            </div>
+          </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+			<div class="modal-header flex-column">
+				<div class="icon-box">
+					<i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+				</div>						
+				<h4 class="modal-title w-100">Are you sure?</h4>	
+			</div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+		</div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+   
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,156 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Departemen {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Departemen</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap"> 
+              <button type="button" class="btn btn-primary waves-effect waves-light add-record" data-bs-toggle="modal" data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Departmen
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <!-- <th>id</th> -->
+                <th>Departemen</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Departemen</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select id="departemen" class="form-select D" placeholder="Enter Departemen" required>
+                </select>
+                <label for="departemen">Departemen</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select id="asmen" class="form-select D" placeholder="Enter Assistant Departemen" required>
+                </select>
+                <!-- <input type="text" id="asmen" class="form-control" placeholder="Enter Assistant Manager Departemen" required> -->
+                <label for="asmen">Assistant Manager Departemen</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="manager" class="form-control" placeholder="Enter Manager Departemen" required>
+                <label for="manager">Manager Departemen</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="director" class="form-control" placeholder="Enter Director" required>
+                <label for="director">Director</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="senior-director" class="form-control" placeholder="Enter Senior Director" required>
+                <label for="senior-director">Senior Director</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  //AUTO COMPLETE
+  $(document).ready(function() {
+    
+    //Filling Departemen
+    $(document).on("click", ".add-record", function(event) {
+      event.preventDefault()
+      $("#departemen").html('<option disabled selected><span class="spinner-border spinner-border-sm"></span> Loading...</option>');
+      $.ajax({
+        url: '/api/dept-hcis',
+        type: 'GET',
+        success: function(response) {
+          option_dept = `<option value=""> Choose One </option>`;
+          for(dept of response){
+            option_dept += `<option value="${dept.DepartmentId}" data-organisasi="${dept.OrganizationName}">${dept.DepartmentName}</option>`;
+          }
+          $("#departemen").html(option_dept);
+        }
+      })
+    });
+
+    // //Filling Asmen
+    $(document).on("click", "#asmen", function(event) {
+      event.preventDefault();
+      $("#asmen").html('<option disabled selected><span class="spinner-border spinner-border-sm"></span> Loading...</option>');
+      let dept = $("#departemen").val();
+      $.ajax({
+        url: '/api/auto-complete-hcis',
+        type: 'GET',
+        data: { search: $('#asmen').val()},
+        success: function(response){
+          option_asmen = `<option value=""> Choose One </option>`;
+          response.forEach( data =>{
+            data.Positions.forEach(pos =>{
+              if(dept == pos.DepartmentId) {
+                console.log(data, "<--ini data")
+                option_asmen += `<option value="${pos.EmployeeId}">${pos.EmployeeName}</option>`;
+              }
+            });
+          });
+          $("#asmen").html(option_asmen)
+        }
+      })
+    });
+
+  });
+</script>
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

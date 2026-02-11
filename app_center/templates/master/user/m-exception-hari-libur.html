@@ -1,0 +1,450 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Master Exception Hari Libur {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">Master Exception Hari Libur</h5>
+          </div>
+          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+            <div class="dt-buttons btn-group flex-wrap">
+              <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
+                data-bs-target="#modal-add">
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Exception Hari Libur
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Id Lokasi</th>
+                <th>Tanggal Kerja Start</th>
+                <th>Tanggal Kerja End</th>
+                <th>Keterangan</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Exception Hari Libur</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select" id="id_lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="id_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="tgl_kerja_start" class="form-control" placeholder="Enter Tanggal Kerja Start" required>
+                <label for="tgl_kerja_start">Tanggal Kerja Start</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="tgl_kerja_end" class="form-control" placeholder="Enter Tanggal Kerja End" required>
+                <label for="tgl_kerja_end">Tanggal Kerja End</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <textarea name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan" required></textarea>
+                <label for="keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Exception Hari Libur</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="detail-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select" id="detail_id_lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="detail_id_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="detail_tgl_kerja_start" class="form-control" placeholder="Enter Tanggal Kerja Start" readonly required>
+                <label for="detail_tgl_kerja_start">Tanggal Kerja Start</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="detail_tgl_kerja_end" class="form-control" placeholder="Enter Tanggal Kerja End" readonly required>
+                <label for="detail_tgl_kerja_end">Tanggal Kerja End</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <textarea name="keterangan" id="detail_keterangan" class="form-control" placeholder="Keterangan" readonly required></textarea>
+                <label for="detail_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Exception Hari Libur</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit_id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <select class="form-select" id="edit_id_lokasi" aria-label="Default select example" required>
+                </select>
+                <label for="edit_id_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="edit_tgl_kerja_start" class="form-control" placeholder="Enter Tanggal Kerja Start" required>
+                <label for="edit_tgl_kerja_start">Tanggal Kerja Start</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="edit_tgl_kerja_end" class="form-control" placeholder="Enter Tanggal Kerja End" required>
+                <label for="edit_tgl_kerja_end">Tanggal Kerja End</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <textarea name="keterangan" id="edit_keterangan" class="form-control" placeholder="Keterangan" required></textarea>
+                <label for="edit_keterangan">Keterangan</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+      <div class="modal-header flex-column">
+        <div class="icon-box">
+          <i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+        </div>
+        <h4 class="modal-title w-100">Are you sure?</h4>
+      </div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  // INISIALISASI
+  fetchDropdownLokasi()
+
+  $(document).ready(function () {
+
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: true,
+      order: [[0, 'desc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/m-exception-hari-libur",
+        data: function (sc) {
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        { data: 'id', visible: false},
+        { data: 'lokasi' },  
+        { data: 'tgl_kerja_start' },  
+        { data: 'tgl_kerja_end' },  
+        { data: 'keterangan' },
+        {
+          orderable: false,
+          className: 'control',
+          data: null,
+          render: function (data) {
+            return `
+              <div class="d-flex align-items-center">
+                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
+      ]
+    }); table.on('draw', function () { initializeTooltips(); });
+
+    // SUBMIT DATA
+    $(document).on("submit", "#add-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id_lokasi: $('#id_lokasi').val(),
+        tgl_kerja_start: $('#tgl_kerja_start').val(),
+        tgl_kerja_end: $('#tgl_kerja_end').val(),
+        keterangan: $('#keterangan').val(),
+      };
+      $.ajax({
+        url: '/api/m-exception-hari-libur',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#add-form')[0].reset();
+          $('#modal-add').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+    // END SUBMIT DATA
+
+    // DETAIL DATA
+    $(document).on("click", ".detail-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      option_lok = `<option selected value="${rdata.id_lokasi}">${rdata.lokasi}</option>`
+      console.log(rdata.tgl_kerja_start)
+      cece = rdata.tgl_kerja_start.replace(" ", "T")
+      tete = rdata.tgl_kerja_end.replace(" ", "T")
+      $('#detail_id').val(rdata.id)
+      $('#detail_id_lokasi').html(option_lok)
+      $('#detail_tgl_kerja_start').val(cece)
+      $('#detail_tgl_kerja_end').val(tete)
+      $('#detail_keterangan').val(rdata.keterangan)
+      $('#modal-detail').modal('show')
+    })
+    // END DETAIL DATA
+
+    // UPDATE DATA
+    $(document).on("click", ".edit-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      option_lok = `<option selected value="${rdata.id_lokasi}">${rdata.lokasi}</option>`
+      cece = rdata.tgl_kerja_start.replace(" ", "T")
+      tete = rdata.tgl_kerja_end.replace(" ", "T")
+      fetchDropdownLokasiEdit(rdata)
+      $('#edit_id').val(rdata.id)
+      $('#edit_id_lokasi').val(rdata.id_lokasi)
+      $('#edit_tgl_kerja_start').val(cece)
+      $('#edit_tgl_kerja_end').val(tete)
+      $('#edit_keterangan').val(rdata.keterangan)
+      $('#modal-edit').modal('show')
+    })
+
+    $(document).on("submit", "#edit-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id: $('#edit_id').val(),
+        id_lokasi: $('#edit_id_lokasi').val(),
+        tgl_kerja_start: $('#edit_tgl_kerja_start').val(),
+        tgl_kerja_end: $('#edit_tgl_kerja_end').val(),
+        keterangan: $('#edit_keterangan').val()
+      };
+      $.ajax({
+        url: '/api/m-exception-hari-libur',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+      $('#modal-edit').modal('show')
+    })
+    // END UPDATE DATA
+
+    $(document).on("click", ".delete-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    })
+
+    $(document).on("submit", "#delete-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/m-exception-hari-libur',
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-delete').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+  function fetchDropdownLokasi() {
+    $.ajax({
+      url: '/api/m-lokasi',
+      method: 'POST',
+      data: { mode: 'dropdown' },
+      success: function (response) {
+        option_lokasi = `<option value=""> Choose One </option>`;
+        for (loka of response.data) {
+          option_lokasi += `<option value="${loka.id}">${loka.lokasi}</option>`
+        }
+          $("#id_lokasi").html(option_lokasi)
+      },
+    });
+  }
+  
+  function fetchDropdownLokasiEdit(rdata) {
+    $.ajax({
+      url: '/api/m-lokasi',
+      method: 'POST',
+      data: { mode: 'dropdown' },
+      success: function(response) {
+        option_lokasi = '';
+        for (lololo of response.data) {
+          if (lololo.id == rdata.id_lokasi) {
+            option_lokasi += `<option selected value="${lololo.id}">${lololo.lokasi}</option>`;
+          } else {
+            option_lokasi += `<option value="${lololo.id}">${lololo.lokasi}</option>`;
+          }
+        }
+        $("#edit_id_lokasi").html(option_lokasi)
+      }
+    });
+  }
+
+
+
+
+</script>
+
+
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}
