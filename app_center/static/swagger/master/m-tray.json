@@ -1,0 +1,152 @@
+{
+  "get": {
+    "summary": "Get a list of Master Tray",
+    "description": "Returns a list of tray",
+    "tags": ["m-tray"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id tray",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_lokasi",
+        "description": "id lokasi",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "tray",
+        "description": "tray",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master tray",
+    "summary": "Add master tray",
+    "tags": ["m-tray"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_lokasi": {
+                "type": "integer"
+              },
+              "tray": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master tray",
+    "summary": "Edit master tray",
+    "tags": ["m-tray"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "id_lokasi":{
+                "type":"integer"
+              },
+              "tray": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master tray",
+    "summary": "Delete master tray",
+    "tags": ["m-tray"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

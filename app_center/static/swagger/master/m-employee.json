@@ -1,0 +1,167 @@
+{
+  "get": {
+    "summary": "Get a list of Master Employee",
+    "description": "Returns a list of employee",
+    "tags": ["m-employee"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id employee",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "nik",
+        "description": "nik employee",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "nama",
+        "description": "nama employee",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "departemen",
+        "description": "departemen employee",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master employee",
+    "summary": "Add master employee",
+    "tags": ["m-employee"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "nik": {
+                "type": "integer"
+              },
+              "nama":{
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              },
+              "departemen":{
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master employee",
+    "summary": "Edit master employee",
+    "tags": ["m-employee"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "nik": {
+                "type": "integer"
+              },
+              "nama": {
+                "type": "integer"
+              },
+              "departemen":{
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master employee",
+    "summary": "Delete master employee",
+    "tags": ["m-employee"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

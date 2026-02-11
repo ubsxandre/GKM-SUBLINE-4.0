@@ -1,0 +1,27 @@
+{
+  "get": {
+    "summary": "Logout Akun",
+    "description": "Clear the session and log out the user",
+    "tags":["Login"],
+    "parameters": [],
+    "responses": {
+      "200": {
+        "description": "A successful response",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

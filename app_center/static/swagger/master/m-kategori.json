@@ -1,0 +1,140 @@
+{
+  "get": {
+    "summary": "Get a list of Master Kategori",
+    "description": "Returns a list of kategori",
+    "tags": ["m-kategori"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id kategori",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "kategori",
+        "description": "nama kategori",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master kategori",
+    "summary": "Add master kategori",
+    "tags": ["m-kategori"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "kategori":{
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master kategori",
+    "summary": "Edit master kategori",
+    "tags": ["m-kategori"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "kategori": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master kategori",
+    "summary": "Delete master kategori",
+    "tags": ["m-kategori"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

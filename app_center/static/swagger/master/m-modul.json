@@ -1,0 +1,152 @@
+{
+  "get": {
+    "summary": "Get a list of Master Modul",
+    "description": "Returns a list of modul",
+    "tags": ["m-modul"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id modul",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "serial_number_gateway",
+        "description": "serial number gateway",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "serial_number",
+        "description": "serial number ",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master modul",
+    "summary": "Add master modul",
+    "tags": ["m-modul"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "serial_number_gateway": {
+                "type": "string"
+              },
+              "serial_number": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master modul",
+    "summary": "Edit master modul",
+    "tags": ["m-modul"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "serial_number_gateway":{
+                "type": "string"
+              },
+              "serial_number":{
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master modul",
+    "summary": "Delete master modul",
+    "tags": ["m-hari-libur"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

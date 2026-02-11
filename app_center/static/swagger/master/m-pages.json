@@ -1,0 +1,152 @@
+{
+  "get": {
+    "summary": "Get a list of Master Pages",
+    "description": "Returns a list of pages, filtered by id and page",
+    "tags": ["m-pages"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id Pagenyach",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "page",
+        "description": "nama Pagenyach",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "A successful response",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "page": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },    
+  "post": {
+    "summary": "Add master pages",
+    "description": "Add master pages passed in the request body as JSON",
+    "tags": ["m-pages"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "string",
+                "example": "cth: DASHBORD"
+              },
+              "crud":{
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master pages",
+    "summary": "Edit master pages",
+    "tags": ["m-pages"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "page": {
+                "type": "string"
+              },
+              "crud":{
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master pages",
+    "summary": "Delete master pages",
+    "tags": ["m-pages"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

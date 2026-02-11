@@ -1,0 +1,179 @@
+{
+  "get": {
+    "summary": "Get a list of Master RPM",
+    "description": "Returns a list of rpm",
+    "tags": ["m-rpm"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id rpm",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_mesin",
+        "description": "id mesin",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "model_id",
+        "description": "model id",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "nama_produk",
+        "description": "nama produk",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "rpm",
+        "description": "rpm",
+        "type": "integer",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master rpm",
+    "summary": "Add master rpm",
+    "tags": ["m-rpm"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_mesin": {
+                "type": "integer"
+              },
+              "model_id": {
+                "type": "string"
+              },
+              "nama_produk": {
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              },
+              "rpm": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master rpm",
+    "summary": "Edit master rpm",
+    "tags": ["m-rpm"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "id_mesin":{
+                "type":"integer"
+              },
+              "model_id": {
+                "type": "string"
+              },
+              "nama_produk": {
+                "type": "string"
+              },
+              "rpm":{
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master rpm",
+    "summary": "Delete master rpm",
+    "tags": ["m-rpm"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

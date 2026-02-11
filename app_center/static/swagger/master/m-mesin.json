@@ -1,0 +1,191 @@
+{
+  "get": {
+    "summary": "Get a list of Master Mesin",
+    "description": "Returns a list of mesin",
+    "tags": ["m-mesin"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id mesin",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_lokasi",
+        "description": "id lokasi",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_tray",
+        "description": "id tray",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "no_mesin",
+        "description": "nomer mesin ",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_modul",
+        "description": "id modul",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "cycle_time",
+        "description": "cycle time",
+        "type": "float",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master mesin",
+    "summary": "Add master mesin",
+    "tags": ["m-mesin"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_lokasi": {
+                "type": "integer"
+              },
+              "id_tray": {
+                "type": "integer"
+              },
+              "no_mesin": {
+                "type": "string"
+              },
+              "id_modul": {
+                "type": "integer"
+              },
+              "cycle_time": {
+                "type": "float"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master mesin",
+    "summary": "Edit master mesin",
+    "tags": ["m-mesin"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_lokasi": {
+                "type": "integer"
+              },
+              "id_tray": {
+                "type": "integer"
+              },
+              "no_mesin": {
+                "type": "string"
+              },
+              "id_modul": {
+                "type": "integer"
+              },
+              "cycle_time": {
+                "type": "float"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master mesin",
+    "summary": "Delete master mesin",
+    "tags": ["m-mesin"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "post": {
+    "summary": "Login User using SSO account",
+    "description": "Login User using SSO account",
+    "tags":["Login"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nik": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

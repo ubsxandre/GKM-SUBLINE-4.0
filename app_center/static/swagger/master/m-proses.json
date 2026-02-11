@@ -1,0 +1,165 @@
+{
+  "get": {
+    "summary": "Get a list of Master Proses",
+    "description": "Returns a list proses",
+    "tags": ["m-proses"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id proses",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_lokasi",
+        "description": "id lokasi",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "kode_proses",
+        "description": "kode proses ",
+        "type": "string",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "nama_proses",
+        "description": "nama proses ",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master proses",
+    "summary": "Add master proses",
+    "tags": ["m-proses"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_lokasi": {
+                "type": "integer"
+              },
+              "kode_proses": {
+                "type": "string"
+              },
+              "nama_proses": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master proses",
+    "summary": "Edit master proses",
+    "tags": ["m-proses"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_lokasi": {
+                "type": "integer"
+              },
+              "kode_proses": {
+                "type": "string"
+              },
+              "nama_proses": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master proses",
+    "summary": "Delete master proses",
+    "tags": ["m-proses"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

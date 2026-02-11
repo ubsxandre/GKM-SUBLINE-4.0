@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "nama": "Tarmuji Dikira Sombong",
+      "roles": "Admin",
+      "nik": "016969",
+      "departemen": "QMS",
+      "golongan": "5",
+      "billing": "Manual - Credit Card",
+      "status": 3,
+      "avatar": ""
+    },
+    {
+      "id": 2,
+      "nama": "Dina Makan Nasi",
+      "roles": "Operator",
+      "nik": "019696",
+      "departemen": "HRD",
+      "golongan": "4",
+      "billing": "Manual - Paypal",
+      "status": 1,
+      "avatar": "10.png"
+    },
+    {
+      "id": 3,
+      "nama": "Bima Andalan Keluarga",
+      "roles": "Operator",
+      "nik": "016996",
+      "departemen": "KALUNG",
+      "golongan": "4",
+      "billing": "Manual - Paypal",
+      "status": 2,
+      "avatar": ""
+    }
+  ]
+}

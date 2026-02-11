@@ -1,0 +1,49 @@
+{
+  "post": {
+    "summary": "Get bearer Token untuk autentikasi menggunakan bearer",
+    "description": "Returns Token bearer yang digunakan untuk get api",
+    "tags":["Bearer Token"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nik": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "A successful response",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

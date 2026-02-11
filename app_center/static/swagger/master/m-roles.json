@@ -1,0 +1,144 @@
+{
+  "get": {
+    "summary": "Get a list of Master Role",
+    "description": "Returns a list of roles, filtered by id and role passed in the request body as JSON",
+    "tags": ["m-roles"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id Rolenyach",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "role",
+        "description": "nama Rolenyach",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "A successful response",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },    
+  "post": {
+    "description": "Add Master Roles",
+    "summary": "Add Master Roles",
+    "tags": ["m-roles"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit Master Roles",
+    "summary": "Edit Master Roles",
+    "tags": ["m-roles"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete Master Roles",
+    "summary": "Delete Master Roles",
+    "tags": ["m-roles"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

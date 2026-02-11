@@ -1,0 +1,177 @@
+{
+  "get": {
+    "summary": "Get a list of Master Akses",
+    "description": "Returns a list of akses, filtered by id and akses",
+    "tags": ["m-akses"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id akses",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_role",
+        "description": "id role",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_page",
+        "description": "id page",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "akses",
+        "description": "nama akses",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "A successful response",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_role": {
+                "type": "integer"
+              },
+              "id_page": {
+                "type": "integer"
+              },
+              "akses": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },    
+  "post": {
+    "description": "Add master akses",
+    "summary": "Add master akses",
+    "tags": ["m-akses"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id_role": {
+                "type": "integer"
+              },
+              "id_page": {
+                "type": "integer"
+              },
+              "akses":{
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master akses",
+    "summary": "Edit master akses",
+    "tags": ["m-akses"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "id_page": {
+                "type": "integer"
+              },
+              "id_role": {
+                "type": "integer"
+              },
+              "akses":{
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master akses",
+    "summary": "Delete master akses",
+    "tags": ["m-akses"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

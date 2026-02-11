@@ -1,0 +1,179 @@
+{
+  "get": {
+    "summary": "Get a list of Master Hari Libur",
+    "description": "Returns a list of hari libur",
+    "tags": ["m-hari-libur"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id hari libur",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "id_proses",
+        "description": "id proses",
+        "type": "int",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "tanggal_libur",
+        "description": "tanggal libur ",
+        "type": "datetime",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "durasi_libur_jam",
+        "description": "durasi libur jam",
+        "type": "float",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "keterangan",
+        "description": "keterangan hari libur",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },
+  "post": {
+    "description": "Add master hari libur",
+    "summary": "Add master hari libur",
+    "tags": ["m-hari-libur"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "id_proses": {
+                "type": "integer"
+              },
+              "tanggal_libur": {
+                "type": "datetime"
+              },
+              "durasi_libur_jam": {
+                "type": "float"
+              },
+              "keterangan": {
+                "type": "string",
+                "example": "cth: C,R,U,D"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit master hari libur",
+    "summary": "Edit master hari libur",
+    "tags": ["m-hari-libur"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "id_proses":{
+                "type":"integer"
+              },
+              "tanggal_libur": {
+                "type": "datetime"
+              },
+              "durasi_libur_jam": {
+                "type": "float"
+              },
+              "keterangan":{
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master hari libur",
+    "summary": "Delete master hari libur",
+    "tags": ["m-hari-libur"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

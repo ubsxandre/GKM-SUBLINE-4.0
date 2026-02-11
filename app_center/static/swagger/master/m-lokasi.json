@@ -1,0 +1,144 @@
+{
+  "get": {
+    "summary": "Get a list of Master Lokasi",
+    "description": "Returns a list of lokasi, filtered by id and lokasi passed in the request body as JSON",
+    "tags": ["m-lokasi"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "id",
+        "description": "id lokasi",
+        "type": "integer",
+        "required": false
+      },
+      {
+        "in": "query",  
+        "name": "lokasi",
+        "description": "nama lokasi",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "A successful response",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },    
+  "post": {
+    "description": "Add Master Lokasi",
+    "summary": "Add Master Lokasi",
+    "tags": ["m-lokasi"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "put": {
+    "description": "Edit Master Lokasi",
+    "summary": "Edit Master Lokasi",
+    "tags": ["m-lokasi"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete Master Lokasi",
+    "summary": "Delete Master Lokasi",
+    "tags": ["m-lokasi"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id":{
+                "type":"integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}

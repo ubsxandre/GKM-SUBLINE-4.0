@@ -1,0 +1,114 @@
+{
+  "get": {
+    "summary": "Get a list of Master Akses Management",
+    "description": "Returns a list of user access management",
+    "tags": ["m-akses-management"],
+    "parameters": [
+      {
+        "in": "query",  
+        "name": "nik",
+        "description": "nik user",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      },
+      "404": {
+        "description": "Data Not Found"
+      }
+    }
+  },    
+  "put": {
+    "description": "Edit master akses Management",
+    "summary": "Edit master akses Management",
+    "tags": ["m-akses-management"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "akses": {
+                  "type":"string"
+                },
+                "id_page": {
+                  "type": "integer"
+                },
+                "id_role": {
+                  "type": "integer"
+                },
+                "nik": {
+                  "type": "string"
+                },
+                "page": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "status":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  },
+  "delete": {
+    "description": "Delete master akses Management",
+    "summary": "Delete master akses Management",
+    "tags": ["m-akses-management"],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "requestBody":{
+      "content": {
+        "application/json":{
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nik":{
+                "type":"string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "User granted access"
+      },
+      "400": {
+        "description": "Invalid request data"
+      }
+    }
+  }
+}
