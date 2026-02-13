@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Master Employees {% endblock %}
+{% block title %} Absensi {% endblock %}
 
 {% block stylesheets %}{% endblock stylesheets %}
 
@@ -12,25 +12,28 @@
       <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
         <div class="card-header flex-column flex-md-row border-bottom">
           <div class="head-label text-center">
-            <h5 class="card-title mb-0">Master Employee</h5>
+            <h5 class="card-title mb-0">Absensi</h5>
           </div>
-          <div class="dt-action-buttons text-end pt-3 pt-md-0">
+          <!-- <div class="dt-action-buttons text-end pt-3 pt-md-0">
             <div class="dt-buttons btn-group flex-wrap">
               <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal"
                 data-bs-target="#modal-add">
-                <i class="ri-add-line ri-16px me-sm-2"></i> Add New Employee
+                <i class="ri-add-line ri-16px me-sm-2"></i> Add Absen
               </button>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="card-datatable table-responsive">
           <table class="table w-100" id="datatable">
             <thead>
               <tr>
-                <th>Id</th>
+                <th>ID</th>
                 <th>NIK</th>
                 <th>Nama</th>
-                <th>Action</th>
+                <th>Tgl In</th>
+                <th>Tgl Out</th>
+                <th>Lokasi</th>
+                <!-- <th>Action</th> -->
               </tr>
             </thead>
             <tbody></tbody>
@@ -215,7 +218,7 @@
       order: [[0, 'desc']],
       serverMethod: 'POST',
       ajax: {
-        url: "/api/m-employees",
+        url: "/api/t-absensi",
         data: function (sc) {
           sc.mode = 'datatable'
           return sc
@@ -233,20 +236,23 @@
         { data: 'id', visible: false },
         { data: 'nik' },
         { data: 'nama' },
-        {
-          orderable: false,
-          className: 'control',
-          data: null,
-          render: function (data) {
-            return `
-              <div class="d-flex align-items-center">
-                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
-                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
-                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
-              </div>
-            `
-          }
-        },
+        { data: 'tgl_in' },
+        { data: 'tgl_out' },
+        { data: 'lokasi' },
+        // {
+        //   orderable: false,
+        //   className: 'control',
+        //   data: null,
+        //   render: function (data) {
+        //     return `
+        //       <div class="d-flex align-items-center">
+        //         <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+        //         <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+        //         <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+        //       </div>
+        //     `
+        //   }
+        // },
       ]
     }); table.on('draw', function () { initializeTooltips(); });
 

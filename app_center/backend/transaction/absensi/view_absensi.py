@@ -10,3 +10,5 @@ from flask import render_template, redirect, url_for, request, jsonify
 @controller_akses.autentikasi
 def api_t_absensi():
   mode = request.form.get('mode')
+  if request.method == 'POST' and mode == 'datatable':
+    return controller_absensi.getTransAbsensiDatatable()
