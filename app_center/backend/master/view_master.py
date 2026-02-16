@@ -104,6 +104,8 @@ def api_m_employees():
   mode =request.form.get('mode')
   if request.method == "POST" and mode == "datatable":
     return controller_master.getEmployeesDatatable()
+  elif request.method == 'POST' and mode == 'dropdown':
+    return controller_master.dropdownEmployees()
   
 # ''' MASTER DEPARTEMEN '''
 # @be_master_init.route('/api/m-departemen', methods=['GET', 'POST', 'PUT', 'DELETE'])

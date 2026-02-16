@@ -853,6 +853,29 @@ def dropdownBagian():
   except Exception as e:
     print(e)
     return jsonify({'status':'error', 'message':str(e)})
+  
+def dropdownEmployees():
+  try:
+    id_code = request.form.get('id_code')
+    nik = request.form.get('nik')
+
+    filter = []
+    filter.append(MPLOY.id==id,) if request.form.get('id_code') else []
+    filter.append(MPLOY.nik==nik,) if request.form.get('nik') else []
+    
+    qploy = db.session.query(MPLOY).with_entities(MPLOY.id, MPLOY.id_code, MPLOY.nik, MPLOY.nama, MPLOY.bagian, MPLOY.departement, 
+                                                 MPLOY.jabatan, MPLOY.golongan, MPLOY.created_date, MPLOY.status_aktif, )\
+                                      .filter(MPLOY.status_aktif==1,
+                                              *filter,
+                                              ).order_by(MPLOY.nik,).all()
+    data = []
+    for row in qploy:
+      data.append(row._asdict())
+    message = 'Data Employee retrieved successfully' if qploy else 'Employee not found' 
+    return jsonify({'status':'success', 'message':message, 'data':data})
+  except Exception as e:
+    print(e)
+    return jsonify({'status':'error', 'message':str(e)})
 
 
 ''' GET GET AN '''

@@ -42,3 +42,7 @@ def register_backend(app):
   ''' TRANSACTION ABSENSI '''
   from app_center.backend.transaction.absensi import be_absensi_init as absensi
   app.register_blueprint(absensi)
+
+  ''' TRANSACTION LEMBUR '''
+  from app_center.backend.transaction.lembur import be_lembur_init as lembur
+  app.register_blueprint(lembur)
