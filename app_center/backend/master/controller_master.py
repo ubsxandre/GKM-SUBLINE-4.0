@@ -863,7 +863,7 @@ def dropdownEmployees():
     filter.append(MPLOY.id==id,) if request.form.get('id_code') else []
     filter.append(MPLOY.nik==nik,) if request.form.get('nik') else []
     
-    qploy = db.session.query(MPLOY).with_entities(MPLOY.id, MPLOY.id_code, MPLOY.nik, MPLOY.nama, MPLOY.bagian, MPLOY.departement, 
+    qploy = db.session.query(MPLOY).with_entities(MPLOY.id, MPLOY.id_code, MPLOY.nik, MPLOY.nama, MPLOY.bagian, MPLOY.departemen, 
                                                  MPLOY.jabatan, MPLOY.golongan, MPLOY.created_date, MPLOY.status_aktif, )\
                                       .filter(MPLOY.status_aktif==1,
                                               *filter,

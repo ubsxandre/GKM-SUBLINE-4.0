@@ -33,7 +33,7 @@
                 <th>Start Lembur</th>
                 <th>End Lembur</th>
                 <th>Lokasi</th>
-                <!-- <th>Action</th> -->
+                <th>Action</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -79,13 +79,63 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col mb-4 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="start_lembur" class="form-control" placeholder="start_lembur" required>
+                <label for="start_lembur">Start Lembur</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-4 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="end_lembur" class="form-control" placeholder="end_lembur" required>
+                <label for="end_lembur">End Lembur</label>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
         </div>
       </form>
+      <script>
+      function clearNikResult() {
+        $('#nama').val('');
+        $('#lokasi').val('');
+      }
 
+      function fetchEmployeeByNik(nik) {
+        if (!nik) {
+          clearNikResult();
+          return;
+        }
+        $.ajax({
+          url: '/api/m-employees',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            mode: 'dropdown',
+            nik: nik
+          },
+          success: function (response) {
+            if (response && response.status === 'success' && response.data && response.data.length > 0) {
+              var emp = response.data[0];
+              console.log(emp)
+              $('#nama').val(emp.nama);
+              $('#lokasi').val(emp.departemen);
+            } else {
+              clearNikResult();
+            }
+          },
+          error: function () {
+            clearNikResult();
+          }
+        });
+      }
+      </script>
     </div>
   </div>
 </div>
@@ -96,7 +146,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel5">Detail Employee</h4>
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Lembur</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="detail-form">
@@ -104,15 +154,15 @@
           <div class="row">
             <div class="col mb-6 mt-2">
               <div class="form-floating form-floating-outline">
-                <input type="text" id="detail_nik" class="form-control" placeholder="Enter Tray" readonly required>
-                <label for="detail_nama">NIK</label>
+                <input type="text" id="detail_nik" class="form-control" placeholder="Enter NIK" readonly required>
+                <label for="detail_nik">NIK</label>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col mb-6 mt-2">
               <div class="form-floating form-floating-outline">
-                <input type="text" id="detail_nama" class="form-control" placeholder="Enter Tray" readonly required>
+                <input type="text" id="detail_nama" class="form-control" placeholder="Enter Nama" readonly required>
                 <label for="detail_nama">Nama</label>
               </div>
             </div>
@@ -120,8 +170,24 @@
           <div class="row">
             <div class="col mb-6 mt-2">
               <div class="form-floating form-floating-outline">
-                <input type="text" id="detail_departemen" class="form-control" placeholder="Enter Tray" readonly required>
-                <label for="detail_departemen">Departemen</label>
+                <input type="text" id="detail_lokasi" class="form-control" placeholder="Enter Lokasi" readonly required>
+                <label for="detail_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_start_lembur" class="form-control" placeholder="Enter Start Lembur" readonly required>
+                <label for="detail_start_lembur">Start Lembur</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_end_lembur" class="form-control" placeholder="Enter End Lembur" readonly required>
+                <label for="detail_end_lembur">End Lembur</label>
               </div>
             </div>
           </div>
@@ -140,7 +206,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel5">Edit Employee</h4>
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Lembur</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="edit-form">
@@ -165,8 +231,24 @@
           <div class="row">
             <div class="col mb-6 mt-2">
               <div class="form-floating form-floating-outline">
-                <input type="text" id="edit_departemen" class="form-control" placeholder="Enter Departemen" required>
-                <label for="edit_departemen">Departemen</label>
+                <input type="text" id="edit_lokasi" class="form-control" placeholder="Enter Lokasi" required>
+                <label for="edit_lokasi">Lokasi</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="edit_start_lembur" class="form-control" placeholder="Enter Start Lembur" required>
+                <label for="edit_start_lembur">Start Lembur</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="datetime-local" id="edit_end_lembur" class="form-control" placeholder="Enter End Lembur" required>
+                <label for="edit_end_lembur">End Lembur</label>
               </div>
             </div>
           </div>
@@ -208,6 +290,8 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+    var nikLookupTimer = null;
+
     var table = $('#datatable').DataTable({
       processing: true,
       serverSide: true,
@@ -229,31 +313,163 @@
       },
       searching: true,
       columns: [
-        { data: 'id', visible: false },
+        { data: 'id', },
         { data: 'nik' },
         { data: 'nama' },
         { data: 'start_lembur' },
         { data: 'end_lembur' },
         { data: 'lokasi' },
-        // {
-        //   orderable: false,
-        //   className: 'control',
-        //   data: null,
-        //   render: function (data) {
-        //     return `
-        //       <div class="d-flex align-items-center">
-        //         <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
-        //         <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
-        //         <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
-        //       </div>
-        //     `
-        //   }
-        // },
+        {
+          orderable: false,
+          className: 'control',
+          data: null,
+          render: function (data) {
+            return `
+              <div class="d-flex align-items-center">
+                <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+                <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+                <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+              </div>
+            `
+          }
+        },
       ]
     }); table.on('draw', function () { initializeTooltips(); });
 
 
-    
+
+    $(document).on('input', '#nik', function () {
+      var nik = $(this).val().trim();
+      if (nikLookupTimer) {
+        clearTimeout(nikLookupTimer);
+      }
+      nikLookupTimer = setTimeout(function () {
+        fetchEmployeeByNik(nik);
+      }, 400);
+    });
+
+    $(document).on("submit", "#add-form", function(event){
+      event.preventDefault();
+      start_lembur = $('#start_lembur').val().replace('T', ' ')
+      end_lembur = $('#end_lembur').val().replace('T', ' ')
+
+      const formData = {
+        nik: $('#nik').val(),
+        nama: $('#nama').val(),
+        lokasi: $('#lokasi').val(),
+        start_lembur: start_lembur,
+        end_lembur: end_lembur,
+      };
+
+      $.ajax({
+        url: '/api/t-lembur', 
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#add-form')[0].reset();
+          $('#modal-add').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+    $(document).on("click", ".detail-record", function(event){
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#detail_nik').val(rdata.nik)
+      $('#detail_nama').val(rdata.nama)
+      $('#detail_lokasi').val(rdata.lokasi)
+      $('#detail_start_lembur').val(rdata.start_lembur)
+      $('#detail_end_lembur').val(rdata.end_lembur)
+
+      $('#modal-detail').modal('show')
+    })
+
+    $(document).on("click", ".edit-record", async function(event){
+      event.preventDefault();
+
+      const rdata = table.row($(this).closest('tr')).data();
+
+      $('#edit_id').val(rdata.id);
+      $('#edit_nik').val(rdata.nik);
+      $('#edit_nama').val(rdata.nama);
+      $('#edit_lokasi').val(rdata.lokasi);
+      $('#edit_start_lembur').val(rdata.start_lembur);
+      $('#edit_end_lembur').val(rdata.end_lembur);
+
+      $('#modal-edit').modal('show');
+    });
+
+    $(document).on("submit", "#edit-form", function(event){
+      event.preventDefault();   
+      start_lembur = $('#edit_start_lembur').val().replace('T', ' ')
+      end_lembur = $('#edit_end_lembur').val().replace('T', ' ')
+
+      const formData = {
+        id: $('#edit_id').val(),
+        nik: $('#edit_nik').val(),
+        nama: $('#edit_nama').val(),
+        lokasi: $('#edit_lokasi').val(),
+        start_lembur: start_lembur,
+        end_lembur: end_lembur,
+      };
+
+      $.ajax({
+        url: '/api/t-lembur', 
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+      $('#modal-edit').modal('show')      
+    })
+
+    $(document).on("click", ".delete-record", function(event){
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    })
+
+    $(document).on("submit", "#delete-form", function(event){
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/t-lembur', 
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-delete').modal('hide') 
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function(xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+
   });
 
 

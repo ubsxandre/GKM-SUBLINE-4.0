@@ -12,3 +12,9 @@ def api_t_lembur():
   mode = request.form.get('mode')
   if request.method == 'POST' and mode == 'datatable':
     return controller_lembur.getTransLemburDatatable()
+  elif request.method == "POST":
+    return controller_lembur.addTransLembur()
+  elif request.method == "PUT":
+    return controller_lembur.editTransLembur()
+  elif request.method == "DELETE":
+    return controller_lembur.deleteTransLembur()
