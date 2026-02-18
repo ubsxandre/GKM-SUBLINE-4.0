@@ -23,7 +23,9 @@ MABSHIST = model_master.MasterEmployeesHistory
 TEL = model_lembur.TransLembur
 TELHIST = model_lembur.TransLemburHistory
 
-
+## Inputan lembur dari CCTV
+## Kemudian di approve SL
+## HC terima2 aja.
 def getTransLemburDatatable():
   datatable = controller_module.Datatable(request.form)
   search_value = datatable.get_search_value()

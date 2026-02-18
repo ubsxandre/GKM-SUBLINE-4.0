@@ -13,6 +13,15 @@ def t_absensi():
   """ Routing Transaction Absensi"""
   return render_template('transaction/t-absensi.html', page="t-absensi")
 
+''' TRANSACTION IZIN'''
+@fe_transaction_init.route('/t-izin')
+@login_required
+@controller_akses.cek_page('TRANSACTION IZIN')
+@controller_akses.page_counter('t-izin')
+def t_izin():
+  """ Routing Transaction Izin"""
+  return render_template('transaction/t-izin.html', page="t-izin")
+
 ''' TRANSACTION LEMBUR'''
 @fe_transaction_init.route('/t-lembur')
 @login_required

@@ -187,6 +187,29 @@ def getAdmkar(nik):
   except Exception as e:
     print(e)
     return None
-  
+
+
+def getAbsensi(nik):
+  try:
+    get_token_api = tokenAPI()
+    get_admkar = f"http://172.20.33.42/ubs-api/admkar/Get_Data?nik={nik}&rfid=''"
+    get_data_admkar = requests.get(get_admkar, headers=get_token_api)
+    data = get_data_admkar.json()
+    return data
+  except Exception as e:
+    print(e)
+    return None
+
+def getIzin(nik):
+  try:
+    get_token_api = tokenAPI()
+    get_admkar = f"http://172.20.33.42/ubs-api/admkar/Get_Data?nik={nik}&rfid=''"
+    get_data_admkar = requests.get(get_admkar, headers=get_token_api)
+    data = get_data_admkar.json()
+    return data
+  except Exception as e:
+    print(e)
+    return None
+
 
   

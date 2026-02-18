@@ -12,3 +12,12 @@ def api_t_absensi():
   mode = request.form.get('mode')
   if request.method == 'POST' and mode == 'datatable':
     return controller_absensi.getTransAbsensiDatatable()
+
+
+''' TRANSACTION IZIN '''
+@be_absensi_init.route('/api/t-izin', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@controller_akses.autentikasi
+def api_t_izin():
+  mode = request.form.get('mode')
+  if request.method == 'POST' and mode == 'datatable':
+    return controller_absensi.getTransAbsensiDatatable()
