@@ -1,0 +1,563 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} E-Izin {% endblock %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+        <div class="card-header flex-column flex-md-row border-bottom">
+          <div class="head-label text-center">
+            <h5 class="card-title mb-0">E-Izin</h5>
+          </div>
+        </div>
+        <div class="card-body py-4">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+              <div class="p-4 rounded-3 border bg-label-secondary">
+                <p class="text-center text-muted mb-3 fw-semibold" style="font-size: 0.95rem;">
+                  <i class="ri-qr-scan-2-line me-1"></i> Scan atau ketik nomor keplek karyawan
+                </p>
+                <div class="input-group input-group-lg shadow-sm">
+                  <span class="input-group-text bg-white border-end-0">
+                    <i class="ri-barcode-line text-primary fs-4"></i>
+                  </span>
+                  <input
+                    type="text"
+                    id="scan-keplek"
+                    class="form-control border-start-0 ps-0"
+                    placeholder="Scan / Ketik Nomor Keplek..."
+                    autocomplete="off"
+                    autofocus
+                    style="font-size: 0.98rem; letter-spacing: 0.03em;"
+                  >
+                </div>
+                <div class="d-flex flex-column flex-md-row gap-3 mt-3 justify-content-center align-items-center">
+                  <div class="d-flex gap-3">
+                    <button type="button" class="btn btn-outline-danger btn-lg px-5 waves-effect waves-light action-toggle" id="btn-keluar" data-action="keluar" aria-pressed="false">
+                      <i class="ri-logout-box-r-line me-2"></i> Keluar
+                    </button>
+                    <button type="button" class="btn btn-outline-success btn-lg px-5 waves-effect waves-light action-toggle" id="btn-masuk" data-action="masuk" aria-pressed="false">
+                      <i class="ri-login-box-line me-2"></i> Masuk
+                    </button>
+                  </div>
+                  {% set current_role = current_user.id_role if current_user.id_role is defined else current_user.id_role %}
+                  {% if current_role in [1, 2, 3, 4] %}
+                    <button type="button" class="btn btn-primary btn-lg px-4 waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal-add-action">
+                      <i class="ri-add-line me-2"></i> Tambah Manual
+                    </button>
+                  {% endif %}
+                </div>
+                <input type="hidden" id="selected-action" value="">
+                <p class="text-center text-muted small mt-2">Pilih salah satu: <strong>Keluar</strong> atau <strong>Masuk</strong>, lalu scan keplek dan tekan Enter.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive">
+          <table class="table w-100" id="datatable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Tgl Out</th>
+                <th>Tgl In</th>
+                <th>Lokasi</th>
+                <!-- <th>Action</th> -->
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Add New Employee</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="nik" class="form-control" placeholder="Enter NIK" required>
+                <label for="nik">NIK</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="nama" class="form-control" placeholder="Enter Nama" required>
+                <label for="nama">Nama</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="departemen" class="form-control" placeholder="Enter Departemen" required>
+                <label for="departemen">Departemen</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD ACTION -->
+<div class="modal animate__animated animate__zoomIn" id="modal-add-action" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Tambah Keluar/Masuk Manual</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="add-action-form">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="manual-keplek" class="form-label">Nomor Keplek / NIK</label>
+            <input type="text" id="manual-keplek" class="form-control" placeholder="Masukkan nomor keplek" autocomplete="off">
+          </div>
+          <div class="mb-3">
+            <label for="manual-tgl-out" class="form-label">Tanggal Keluar</label>
+            <input type="datetime-local" id="manual-tgl-out" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="manual-tgl-in" class="form-label">Tanggal Masuk</label>
+            <input type="datetime-local" id="manual-tgl-in" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal animate__animated animate__zoomIn" id="modal-detail" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Detail Employee</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="detail-form">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_nik" class="form-control" placeholder="Enter Tray" readonly required>
+                <label for="detail_nama">NIK</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_nama" class="form-control" placeholder="Enter Tray" readonly required>
+                <label for="detail_nama">Nama</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="detail_departemen" class="form-control" placeholder="Enter Tray" readonly required>
+                <label for="detail_departemen">Departemen</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT -->
+<div class="modal animate__animated animate__zoomIn" id="modal-edit" tabindex="-1" style="display: none;"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel5">Edit Employee</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit_id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_nik" class="form-control" placeholder="Enter NIK" required>
+                <label for="edit_nik">NIK</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_nama" class="form-control" placeholder="Enter Nama" required>
+                <label for="edit_nama">Nama</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-6 mt-2">
+              <div class="form-floating form-floating-outline">
+                <input type="text" id="edit_departemen" class="form-control" placeholder="Enter Departemen" required>
+                <label for="edit_departemen">Departemen</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary waves-effect waves-light">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DELETE -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+      <div class="modal-header flex-column">
+        <div class="icon-box">
+          <i class="ri-delete-bin-5-line text-danger ri-5x "></i>
+        </div>
+        <h4 class="modal-title w-100">Are you sure?</h4>
+      </div>
+      <form id="delete-form">
+        <div class="modal-body">
+          <input type="hidden" name="" id="id-delete">
+          <p>Do you really want to delete these records? This process cannot be undone.</p>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  // INISIALISASI
+  // fetchDropdown();
+
+  $(document).ready(function () {
+
+    var table = $('#datatable').DataTable({
+      processing: true,
+      serverSide: true,
+      order: [[0, 'desc']],
+      serverMethod: 'POST',
+      ajax: {
+        url: "/api/t-izin-keluar-masuk",
+        data: function (sc) {
+          sc.mode = 'datatable'
+          return sc
+        }
+      },
+      dataType: 'JSON',
+      lengthMenu: [[10, 30, 50, 100], [10, 30, 50, 100]],
+      paging: true,
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      },
+      searching: true,
+      columns: [
+        { data: 'id', visible: false },
+        { data: 'nik' },
+        { data: 'nama' },
+        { data: 'tgl_out' },
+        { data: 'tgl_in' },
+        { data: 'lokasi' },
+        // {
+        //   orderable: false,
+        //   className: 'control',
+        //   data: null,
+        //   render: function (data) {
+        //     return `
+        //       <div class="d-flex align-items-center">
+        //         <a href="javascript:;" class="me-2 detail-record" data-bs-toggle="tooltip" title="Detail"><i class="ri-eye-line text-secondary" ></i> </a>
+        //         <a href="javascript:;" class="me-2 edit-record" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line text-primary"></i> </a> 
+        //         <a href="javascript:;" class="me-2 delete-record" data-bs-toggle="tooltip" title="Delete"><i class="ri-delete-bin-5-line text-danger"></i> </a>
+        //       </div>
+        //     `
+        //   }
+        // },
+      ]
+    }); table.on('draw', function () { initializeTooltips(); });
+
+    // ACTION BUTTONS
+    const $scanInput = $('#scan-keplek');
+    const $actionButtons = $('.action-toggle');
+    const $selectedAction = $('#selected-action');
+
+    function clearActionSelection() {
+      $actionButtons.removeClass('active btn-danger btn-success shadow').addClass('btn-outline-secondary').attr('aria-pressed', 'false');
+      $actionButtons.filter('[data-action="keluar"]').removeClass('btn-danger btn-success').addClass('btn-outline-danger');
+      $actionButtons.filter('[data-action="masuk"]').removeClass('btn-danger btn-success').addClass('btn-outline-success');
+      $actionButtons.css('opacity', '1');
+      $selectedAction.val('');
+    }
+
+    function selectAction(action) {
+      clearActionSelection();
+      const $button = $actionButtons.filter(`[data-action="${action}"]`);
+      $button.removeClass('btn-outline-secondary btn-outline-danger btn-outline-success').addClass(action === 'keluar' ? 'active btn-danger shadow' : 'active btn-success shadow').attr('aria-pressed', 'true');
+      $actionButtons.not($button).css('opacity', '0.7');
+      $selectedAction.val(action);
+      $scanInput.focus();
+    }
+
+    $actionButtons.on('click', function () {
+      const action = $(this).data('action');
+      if ($selectedAction.val() === action) {
+        clearActionSelection();
+        return;
+      }
+      selectAction(action);
+    });
+
+    function submitKeplekAction(mode, action, keplek) {
+      const payload = {
+        mode,
+        action,
+        keplek,
+      };
+
+      $.ajax({
+        url: '/api/t-izin-keluar-masuk',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (response) {
+          if (typeof alertModal === 'object' && alertModal[response.status]) {
+            alertModal[response.status](response.message);
+          } else {
+            alert(response.message || 'Data berhasil dikirim.');
+          }
+          $('#datatable').DataTable().draw('page');
+        },
+        error: function (xhr, status, error) {
+          alert('Gagal mengirim data. Silakan coba lagi.');
+          console.error(error, xhr.responseText);
+        }
+      });
+    }
+
+    $scanInput.on('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const action = $selectedAction.val();
+        const keplek = $scanInput.val().trim();
+        if (!action) {
+          return alert('Pilih Keluar atau Masuk terlebih dahulu.');
+        }
+        if (!keplek) {
+          $scanInput.focus();
+          return alert('Silakan masukkan nomor keplek terlebih dahulu.');
+        }
+
+        submitKeplekAction('add_scan', action, keplek);
+        $scanInput.val('');
+        clearActionSelection();
+      }
+    });
+
+    $scanInput.on('input', function () {
+      if (!$(this).val().trim()) {
+        clearActionSelection();
+      }
+    });
+
+    $(document).on('submit', '#add-action-form', function (event) {
+      event.preventDefault();
+      const keplek = $('#manual-keplek').val().trim();
+      const tgl_out = $('#manual-tgl-out').val();
+      const tgl_in = $('#manual-tgl-in').val();
+
+      if (!keplek) {
+        return alert('Masukkan nomor keplek untuk penambahan manual.');
+      }
+      if (!tgl_out && !tgl_in) {
+        return alert('Minimal salah satu tanggal (Keluar atau Masuk) harus diisi.');
+      }
+
+      const formData = {
+        mode: 'add_manual',
+        keplek: keplek,
+        tgl_out: tgl_out || null,
+        tgl_in: tgl_in || null,
+      };
+
+      $.ajax({
+        url: '/api/t-izin-keluar-masuk',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#add-action-form')[0].reset();
+          $('#modal-add-action').modal('hide');
+          table.draw('page');
+          alertModal[response.status](response.message);
+        },
+        error: function (xhr, status, error) {
+          alert('Gagal mengirim data. Silakan coba lagi.');
+          console.error(error, xhr.responseText);
+        }
+      });
+    });
+
+    // SUBMIT DATA
+    $(document).on("submit", "#add-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        nik: $('#nik').val(),
+        nama: $('#nama').val(),
+        departemen: $('#departemen').val(),
+      };
+      $.ajax({
+        url: '/api/m-employee',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#add-form')[0].reset();
+          $('#modal-add').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+    // END SUBMIT DATA
+
+    // DETAIL DATA
+    $(document).on("click", ".detail-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#detail_id').val(rdata.id)
+      $('#detail_nik').val(rdata.nik)
+      $('#detail_nama').val(rdata.nama)
+      $('#detail_departemen').val(rdata.departemen)
+      $('#modal-detail').modal('show')
+    })
+    // END DETAIL DATA
+
+    // UPDATE DATA
+    $(document).on("click", ".edit-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#edit_id').val(rdata.id)
+      $('#edit_nik').val(rdata.nik)
+      $('#edit_nama').val(rdata.nama)
+      $('#edit_departemen').val(rdata.departemen)
+      $('#modal-edit').modal('show')
+    })
+
+    $(document).on("submit", "#edit-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id: $('#edit_id').val(),
+        nik: $('#edit_nik').val(),
+        nama: $('#edit_nama').val(),
+        departemen: $('#edit_departemen').val()
+      };
+      $.ajax({
+        url: '/api/m-employee',
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-edit').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+      $('#modal-edit').modal('show')
+    })
+    // END UPDATE DATA
+
+    $(document).on("click", ".delete-record", function (event) {
+      event.preventDefault()
+      rdata = table.row($(this).closest('tr')).data()
+      $('#id-delete').val(rdata.id)
+      $('#modal-delete').modal('show')
+    })
+
+    $(document).on("submit", "#delete-form", function (event) {
+      event.preventDefault()
+      const formData = {
+        id: $('#id-delete').val(),
+      };
+      $.ajax({
+        url: '/api/m-employee',
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (response) {
+          $('#response-message').html('<p>' + response.message + '</p>');
+          $('#modal-delete').modal('hide')
+          table.draw('page')
+          alertModal[response.status](response.message)
+        },
+        error: function (xhr, status, error) {
+          alert('Unauthorized. Please log in.')
+          location.reload();
+        }
+      });
+    })
+
+  });
+
+
+</script>
+
+{% endblock content %}
+
+{% block javascripts %}{% endblock javascripts %}

@@ -22,6 +22,15 @@ def t_izin():
   """ Routing Transaction Izin"""
   return render_template('transaction/t-izin.html', page="t-izin")
 
+''' TRANSACTION IZIN KELUAR MASUK'''
+@fe_transaction_init.route('/t-izin-keluar-masuk')
+@login_required
+@controller_akses.cek_page('TRANSACTION IZIN KELUAR MASUK')
+@controller_akses.page_counter('t-izin-keluar-masuk')
+def t_izin_keluar_masuk():
+  """ Routing Transaction Izin Keluar Masuk"""
+  return render_template('transaction/t-izin-keluar-masuk.html', page="t-izin-keluar-masuk")
+
 ''' TRANSACTION LEMBUR'''
 @fe_transaction_init.route('/t-lembur')
 @login_required
