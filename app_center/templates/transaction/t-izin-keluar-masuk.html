@@ -18,25 +18,8 @@
         <div class="card-body py-4">
           <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
-              <div class="p-4 rounded-3 border bg-label-secondary">
-                <p class="text-center text-muted mb-3 fw-semibold" style="font-size: 0.95rem;">
-                  <i class="ri-qr-scan-2-line me-1"></i> Scan atau ketik nomor keplek karyawan
-                </p>
-                <div class="input-group input-group-lg shadow-sm">
-                  <span class="input-group-text bg-white border-end-0">
-                    <i class="ri-barcode-line text-primary fs-4"></i>
-                  </span>
-                  <input
-                    type="text"
-                    id="scan-keplek"
-                    class="form-control border-start-0 ps-0"
-                    placeholder="Scan / Ketik Nomor Keplek..."
-                    autocomplete="off"
-                    autofocus
-                    style="font-size: 0.98rem; letter-spacing: 0.03em;"
-                  >
-                </div>
-                <div class="d-flex flex-column flex-md-row gap-3 mt-3 justify-content-center align-items-center">
+              <div class="p-4 rounded-3 border bg-label shadow-sm">
+                <div class="d-flex flex-column flex-md-row gap-3 mb-3 justify-content-center align-items-center">
                   <div class="d-flex gap-3">
                     <button type="button" class="btn btn-outline-danger btn-lg px-5 waves-effect waves-light action-toggle" id="btn-keluar" data-action="keluar" aria-pressed="false">
                       <i class="ri-logout-box-r-line me-2"></i> Keluar
@@ -51,6 +34,23 @@
                       <i class="ri-add-line me-2"></i> Tambah Manual
                     </button>
                   {% endif %}
+                </div>
+                <div class="mb-3 d-none" id="keperluan-wrapper">
+                  <select class="form-select form-select-sm select2" id="keperluan" >
+                    <option value="">-- Pilih Keperluan --</option>
+                    <option value="Istirahat">Istirahat</option>
+                    <option value="Izin ke Toilet">Izin ke Toilet</option>
+                    <option value="Ambil Barang">Ambil Barang</option>
+                  </select>
+                </div>
+                <p class="text-center text-muted mb-3 fw-semibold">
+                  <i class="ri-qr-scan-2-line me-1"></i> Scan atau ketik nomor keplek karyawan
+                </p>
+                <div class="input-group input-group-lg shadow-sm">
+                  <span class="input-group-text bg-white border-end-0">
+                    <i class="ri-barcode-line text-primary fs-4"></i>
+                  </span>
+                  <input type="text" id="scan-keplek" class="form-control border-start-0 ps-0" placeholder="Scan / Ketik Nomor Keplek..." autocomplete="off" autofocus style="font-size: 0.98rem; letter-spacing: 0.03em;" >
                 </div>
                 <input type="hidden" id="selected-action" value="">
                 <p class="text-center text-muted small mt-2">Pilih salah satu: <strong>Keluar</strong> atau <strong>Masuk</strong>, lalu scan keplek dan tekan Enter.</p>
@@ -67,7 +67,8 @@
                 <th>Nama</th>
                 <th>Tgl Out</th>
                 <th>Tgl In</th>
-                <th>Lokasi</th>
+                <th>Store</th>
+                <th>Keperluan</th>
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
@@ -80,7 +81,7 @@
 </div>
 
 <!-- MODAL ADD -->
-<div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;"
+<!-- <div class="modal animate__animated animate__zoomIn" id="modal-add" tabindex="-1" style="display: none;"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -123,7 +124,7 @@
 
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- MODAL ADD ACTION -->
 <div class="modal animate__animated animate__zoomIn" id="modal-add-action" tabindex="-1" aria-hidden="true">
@@ -138,6 +139,15 @@
           <div class="mb-3">
             <label for="manual-keplek" class="form-label">Nomor Keplek / NIK</label>
             <input type="text" id="manual-keplek" class="form-control" placeholder="Masukkan nomor keplek" autocomplete="off">
+          </div>
+          <div class="mb-3">
+            <label for="manual-keperluan" class="form-label">Keperluan</label>
+            <select class="form-select form-select-sm select2" id="manual-keperluan">
+              <option value="">-- Pilih Keperluan --</option>
+              <option value="Istirahat">Istirahat</option>
+              <option value="Izin ke Toilet">Izin ke Toilet</option>
+              <option value="Ambil Barang">Ambil Barang</option>
+            </select>
           </div>
           <div class="mb-3">
             <label for="manual-tgl-out" class="form-label">Tanggal Keluar</label>
@@ -305,7 +315,8 @@
         { data: 'nama' },
         { data: 'tgl_out' },
         { data: 'tgl_in' },
-        { data: 'lokasi' },
+        { data: 'store' },
+        { data: 'keperluan' },
         // {
         //   orderable: false,
         //   className: 'control',
@@ -328,12 +339,17 @@
     const $actionButtons = $('.action-toggle');
     const $selectedAction = $('#selected-action');
 
+    const $keperluanWrapper = $('#keperluan-wrapper');
+    const $keperluan = $('#keperluan');
+
     function clearActionSelection() {
       $actionButtons.removeClass('active btn-danger btn-success shadow').addClass('btn-outline-secondary').attr('aria-pressed', 'false');
       $actionButtons.filter('[data-action="keluar"]').removeClass('btn-danger btn-success').addClass('btn-outline-danger');
       $actionButtons.filter('[data-action="masuk"]').removeClass('btn-danger btn-success').addClass('btn-outline-success');
       $actionButtons.css('opacity', '1');
       $selectedAction.val('');
+      $keperluanWrapper.addClass('d-none');
+      $keperluan.val('');
     }
 
     function selectAction(action) {
@@ -342,6 +358,12 @@
       $button.removeClass('btn-outline-secondary btn-outline-danger btn-outline-success').addClass(action === 'keluar' ? 'active btn-danger shadow' : 'active btn-success shadow').attr('aria-pressed', 'true');
       $actionButtons.not($button).css('opacity', '0.7');
       $selectedAction.val(action);
+      if (action === 'keluar') {
+        $keperluanWrapper.removeClass('d-none');
+      } else {
+        $keperluanWrapper.addClass('d-none');
+        $keperluan.val('');
+      }
       $scanInput.focus();
     }
 
@@ -354,11 +376,12 @@
       selectAction(action);
     });
 
-    function submitKeplekAction(mode, action, keplek) {
+    function submitKeplekAction(mode, action, keplek, keperluan) {
       const payload = {
         mode,
         action,
         keplek,
+        keperluan,
       };
 
       $.ajax({
@@ -386,16 +409,22 @@
         event.preventDefault();
         const action = $selectedAction.val();
         const keplek = $scanInput.val().trim();
+        const keperluan = $keperluan.val();
         if (!action) {
           return alert('Pilih Keluar atau Masuk terlebih dahulu.');
+        }
+        if (action === 'keluar' && !keperluan) {
+          $keperluan.focus();
+          return alert('Pilih keperluan terlebih dahulu.');
         }
         if (!keplek) {
           $scanInput.focus();
           return alert('Silakan masukkan nomor keplek terlebih dahulu.');
         }
 
-        submitKeplekAction('add_scan', action, keplek);
+        submitKeplekAction('add_scan', action, keplek, keperluan);
         $scanInput.val('');
+        $('#keperluan').val('');
         clearActionSelection();
       }
     });
@@ -411,6 +440,7 @@
       const keplek = $('#manual-keplek').val().trim();
       const tgl_out = $('#manual-tgl-out').val();
       const tgl_in = $('#manual-tgl-in').val();
+      const keperluan = $('#manual-keperluan').val();
 
       if (!keplek) {
         return alert('Masukkan nomor keplek untuk penambahan manual.');
@@ -424,6 +454,7 @@
         keplek: keplek,
         tgl_out: tgl_out || null,
         tgl_in: tgl_in || null,
+        keperluan: keperluan || null,
       };
 
       $.ajax({

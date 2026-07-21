@@ -35,14 +35,14 @@ def getTransAbsensiDatatable():
   search_value = datatable.get_search_value()
   order = []
  
-  sort_col_name = ['id', 'nik', 'nama', 'tgl_in', 'tgl_out', 'lokasi']
+  sort_col_name = ['id', 'nik', 'nama', 'tgl_in', 'tgl_out', 'store']
   sort_obj = {
     'id': TABS.id,
     'nik': TABS.nik,
     'nama': TABS.nama,
     'tgl_in': TABS.tgl_in,
     'tgl_out': TABS.tgl_out,
-    'lokasi': TABS.lokasi,
+    'store': TABS.store,
   }
   order = datatable.get_order(sort_col_name=sort_col_name, sort_obj=sort_obj)
   order.append(TABS.id)
@@ -117,14 +117,15 @@ def getTxIzinKeluarMasukDatatable():
   search_value = datatable.get_search_value()
   order = []
  
-  sort_col_name = ['id', 'nik', 'nama', 'tgl_out', 'tgl_in', 'lokasi']
+  sort_col_name = ['id', 'nik', 'nama', 'tgl_out', 'tgl_in', 'store', 'keperluan']
   sort_obj = {
     'id': TIZINKELMAS.id,
     'nik': TIZINKELMAS.nik,
     'nama': TIZINKELMAS.nama,
     'tgl_out': TIZINKELMAS.tgl_out,
     'tgl_in': TIZINKELMAS.tgl_in,
-    'lokasi': TIZINKELMAS.lokasi,
+    'store': TIZINKELMAS.store,
+    'keperluan': TIZINKELMAS.keperluan,
   }
   order = datatable.get_order(sort_col_name=sort_col_name, sort_obj=sort_obj)
   order.append(TIZINKELMAS.id)
@@ -136,14 +137,16 @@ def getTxIzinKeluarMasukDatatable():
                                                                   TIZINKELMAS.nama,
                                                                   func.date_format(TIZINKELMAS.tgl_in, "%Y-%m-%d %H:%i:%s").label('tgl_in'),
                                                           func.date_format(TIZINKELMAS.tgl_out, "%Y-%m-%d %H:%i:%s").label('tgl_out'),
-                                                          TIZINKELMAS.lokasi,)\
+                                                          TIZINKELMAS.store,
+                                                          TIZINKELMAS.keperluan)\
                                           .filter(TIZINKELMAS.status_aktif=='1',
                                                   or_(TIZINKELMAS.id.like(search_value),
                                                       TIZINKELMAS.nik.like(search_value),
                                                       TIZINKELMAS.nama.like(search_value),
                                                       TIZINKELMAS.tgl_in.like(search_value),
                                                       TIZINKELMAS.tgl_out.like(search_value),
-                                                      TIZINKELMAS.lokasi.like(search_value)))\
+                                                      TIZINKELMAS.store.like(search_value),
+                                                      TIZINKELMAS.keperluan.like(search_value)))\
                                           .order_by(*order)
 
   data_json = datatable.get_data_json_with_entities(query_filtered) 
@@ -159,18 +162,18 @@ def getTxIzinKeluarMasuk():
     nama = request.args.get('nama')
     tgl_out = request.args.get('tgl_out')
     tgl_in = request.args.get('tgl_in')
-    lokasi = request.args.get('lokasi')
-    keterangan = request.args.get('keterangan')
+    store = request.args.get('store')
+    keperluan = request.args.get('keperluan')
     filter = []
     filter.append(TIZINKELMAS.id==id) if id else []
     filter.append(TIZINKELMAS.nik.like(f"%{nik}%")) if nik else []
     filter.append(TIZINKELMAS.nama.like(f"%{nama}%")) if nama else []
     filter.append(TIZINKELMAS.tgl_out.like(f"%{tgl_out}%")) if tgl_out else []
     filter.append(TIZINKELMAS.tgl_in.like(f"%{tgl_in}%")) if tgl_in else []
-    filter.append(TIZINKELMAS.lokasi.like(f"%{lokasi}%")) if lokasi else []
-    filter.append(TIZINKELMAS.keterangan.like(f"%{keterangan}%")) if keterangan else []
+    filter.append(TIZINKELMAS.store.like(f"%{store}%")) if store else []
+    filter.append(TIZINKELMAS.keperluan.like(f"%{keperluan}%")) if keperluan else []
 
-    qmploy = db.session.query(TIZINKELMAS).with_entities(TIZINKELMAS.id, TIZINKELMAS.nik, TIZINKELMAS.nama, TIZINKELMAS.tgl_out, TIZINKELMAS.tgl_in, TIZINKELMAS.lokasi, TIZINKELMAS.keterangan).filter(TIZINKELMAS.status_aktif==1, *filter,).all()
+    qmploy = db.session.query(TIZINKELMAS).with_entities(TIZINKELMAS.id, TIZINKELMAS.nik, TIZINKELMAS.nama, TIZINKELMAS.tgl_out, TIZINKELMAS.tgl_in, TIZINKELMAS.store, TIZINKELMAS.keperluan).filter(TIZINKELMAS.status_aktif==1, *filter,).all()
 
     data = []
     for row in qmploy:
@@ -209,7 +212,7 @@ def addTxIzinKeluarMasuk():
         if dcek['tgl_in'] is None:
           return jsonify({'status':'error', 'message':'Tadi setelah keluar, belum checkin lagi'})
 
-      add = TIZINKELMAS(**{'nik': qnik.nik, 'nama': qnik.nama, 'bagian': qnik.bagian, 'tgl_out': today_time, 'created_by': created_by, 'created_date': datetime.now()})
+      add = TIZINKELMAS(**{'nik': qnik.nik, 'nama': qnik.nama, 'bagian': qnik.bagian, 'store': qnik.store, 'tgl_out': today_time, 'keperluan': data_input['keperluan'], 'created_by': created_by, 'created_date': datetime.now()})
       db.session.add(add)
       db.session.commit()
 
@@ -276,7 +279,7 @@ def addTxIzinKeluarMasukManual():
                                                   ).first()
       if qcek:
         return jsonify({'status':'error', 'message':'NIK is already exists in the given time range'})
-      add = TIZINKELMAS(**{'nik': qnik.nik, 'nama': qnik.nama, 'bagian': qnik.bagian, 'tgl_out': data_input['tgl_out'], 'tgl_in': data_input['tgl_in'], 'created_by': created_by, 'created_date': datetime.now()})
+      add = TIZINKELMAS(**{'nik': qnik.nik, 'nama': qnik.nama, 'bagian': qnik.bagian, 'store': qnik.store, 'tgl_out': data_input['tgl_out'], 'tgl_in': data_input['tgl_in'], 'keperluan': data_input['keperluan'], 'created_by': created_by, 'created_date': datetime.now()})
       db.session.add(add)
       data = add.to_dict()
       db.session.commit()
