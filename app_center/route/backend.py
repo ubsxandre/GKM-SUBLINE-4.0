@@ -1,3 +1,6 @@
+from app_center.frontend.report.view_report import report_in_out
+
+
 def register_backend(app):
   ''' LOGIN '''
   from app_center.authentication.login import app_login_init as login
@@ -46,3 +49,7 @@ def register_backend(app):
   ''' TRANSACTION LEMBUR '''
   from app_center.backend.transaction.lembur import be_lembur_init as lembur
   app.register_blueprint(lembur)
+
+  ''' REPORT QC'''
+  from app_center.backend.report.in_out import be_report_in_out_init as report_in_out
+  app.register_blueprint(report_in_out)
