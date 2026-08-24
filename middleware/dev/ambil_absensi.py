@@ -11,7 +11,8 @@ zk = ZK(
   timeout=10,
   password=0,
   force_udp=False,
-  ommit_ping=False
+  ommit_ping=False,
+  verbose=True
 )
 
 conn = None
@@ -23,15 +24,23 @@ try:
   conn.disable_device()
 
   attendance = conn.get_attendance()
+  # for row in attendance:
+  #   print(
+  #       row.user_id,
+  #       row.timestamp,
+  #       row.status,
+  #       row.punch,
+  #       row.workcode
+  #   )
 
   data = []
-
   for row in attendance:
       data.append({
           "user_id": row.user_id,
           "timestamp": row.timestamp,
           "status": row.status,
-          "punch": row.punch
+          "punch": row.punch,
+          "workcode": row.workcode,
       })
 
   df = pd.DataFrame(data)
